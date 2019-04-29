@@ -34,10 +34,6 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
     @Override
     public final Authentication authenticate(Authentication token) throws AuthenticationException {
 
-        if (token == null) {
-            throw new TokenNotFoundException();
-        }
-
         if (!(token instanceof JwtToken)) {
             throw new UnsupportedTokenException();
         }
@@ -48,8 +44,7 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
             Algorithm algorithm = SignatureAlgorithmUtils.toAlgorithm(signatureAlgorithm, secret);
             final JWTVerifier verifier = JWT.require(algorithm).build();
 
-            val rawToken = ((JwtToken) token).getRawToken();
-
+            val rawToken = token.toString();
             DecodedJWT jwt = verifier.verify(rawToken);
             upt = doAuthenticate(jwt, rawToken);
 

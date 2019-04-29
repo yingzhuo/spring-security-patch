@@ -14,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 /**
  * @author 应卓
  */
+@Deprecated
 public class TokenNotFoundException extends AuthenticationException {
 
     public TokenNotFoundException() {

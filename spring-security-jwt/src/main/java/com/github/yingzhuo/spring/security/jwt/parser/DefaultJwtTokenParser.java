@@ -37,7 +37,10 @@ public class DefaultJwtTokenParser implements JwtTokenParser {
         }
 
         String rawToken = headerValue.substring(BEARER_LEN);
-        return Optional.of(new JwtToken(rawToken));
+
+        return Optional.of(
+                JwtToken.of(rawToken)
+        );
     }
 
 }

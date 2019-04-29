@@ -7,7 +7,6 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-
 package com.github.yingzhuo.spring.security.jwt.factory;
 
 import com.auth0.jwt.JWT;
