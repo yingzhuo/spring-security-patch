@@ -41,7 +41,7 @@ public class JwtCustomAutoConfig {
     @Setter
     @ConfigurationProperties(prefix = "spring.security.jwt")
     static class Props implements InitializingBean {
-        private SignatureAlgorithm algorithm = SignatureAlgorithm.HMAC512;;
+        private SignatureAlgorithm algorithm = SignatureAlgorithm.HMAC512;
         private String secret = "https://github.com/yingzhuo/spring-security-patch";
 
         @Override

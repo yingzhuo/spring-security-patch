@@ -33,12 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenParser tokenParser;
     private final AbstractJwtAuthenticationManager authManager;
-    private final JwtAuthenticationFailedEntryPoint authenticationEntryPoint;
+    private final JwtAuthenticationFailedEntryPoint entryPoint;
 
     public JwtAuthenticationFilter(JwtTokenParser tokenParser, AbstractJwtAuthenticationManager authManager, JwtAuthenticationFailedEntryPoint entryPoint) {
         this.tokenParser = tokenParser;
         this.authManager = authManager;
-        this.authenticationEntryPoint = entryPoint;
+        this.entryPoint = entryPoint;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         super.afterPropertiesSet();
         Assert.notNull(tokenParser, () -> null);
         Assert.notNull(authManager, () -> null);
-        Assert.notNull(authenticationEntryPoint, () -> null);
+        Assert.notNull(entryPoint, () -> null);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (AuthenticationException failed) {
 
             SecurityContextHolder.clearContext();
-            authenticationEntryPoint.commence(request, response, failed);
+            entryPoint.commence(request, response, failed);
             return;
         }
 
