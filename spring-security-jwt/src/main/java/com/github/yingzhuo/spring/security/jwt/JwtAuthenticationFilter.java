@@ -9,6 +9,7 @@
  */
 package com.github.yingzhuo.spring.security.jwt;
 
+import com.github.yingzhuo.spring.security.jwt.errorhandler.ErrorHandler;
 import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,16 +30,16 @@ import java.util.Optional;
  * @author 应卓
  */
 @Slf4j
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public final class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenParser tokenParser;
     private final AbstractJwtAuthenticationManager authManager;
-    private final JwtAuthenticationFailedEntryPoint entryPoint;
+    private final ErrorHandler errorHandler;
 
-    public JwtAuthenticationFilter(JwtTokenParser tokenParser, AbstractJwtAuthenticationManager authManager, JwtAuthenticationFailedEntryPoint entryPoint) {
+    public JwtAuthenticationFilter(JwtTokenParser tokenParser, AbstractJwtAuthenticationManager authManager, ErrorHandler errorHandler) {
         this.tokenParser = tokenParser;
         this.authManager = authManager;
-        this.entryPoint = entryPoint;
+        this.errorHandler = errorHandler;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         super.afterPropertiesSet();
         Assert.notNull(tokenParser, () -> null);
         Assert.notNull(authManager, () -> null);
-        Assert.notNull(entryPoint, () -> null);
+        Assert.notNull(errorHandler, () -> null);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (AuthenticationException failed) {
 
             SecurityContextHolder.clearContext();
-            entryPoint.commence(request, response, failed);
+            errorHandler.commence(request, response, failed);
             return;
         }
 

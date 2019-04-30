@@ -47,8 +47,6 @@
     <properties>
         <encoding>UTF-8</encoding>
         <java.version>1.8</java.version>
-        <scala.version>2.12.8</scala.version>
-        <kotlin.version>1.3.21</kotlin.version>
         <springcloud.version>Greenwich.RELEASE</springcloud.version>
         <springboot.version>2.1.4.RELEASE</springboot.version>
         <spring.version>5.1.6.RELEASE</spring.version>
@@ -337,63 +335,11 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- qrcode -->
-            <dependency>
-                <groupId>com.google.zxing</groupId>
-                <artifactId>core</artifactId>
-                <version>3.3.3</version>
-            </dependency>
-
-            <!-- kotlin -->
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-reflect</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-
-            <!-- scala -->
-            <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>scala-library</artifactId>
-                <version>${scala.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>scala-reflect</artifactId>
-                <version>${scala.version}</version>
-            </dependency>
-
-            <!-- scala-logging -->
-            <dependency>
-                <groupId>com.typesafe.scala-logging</groupId>
-                <artifactId>scala-logging_2.12</artifactId>
-                <version>3.9.0</version>
-            </dependency>
-
             <!-- jwt -->
             <dependency>
                 <groupId>com.auth0</groupId>
                 <artifactId>java-jwt</artifactId>
                 <version>3.8.0</version>
-            </dependency>
-
-            <!-- http-utils -->
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpasyncclient</artifactId>
-                <version>4.1.4</version>
-            </dependency>
-
-            <!-- ini4j -->
-            <dependency>
-                <groupId>org.ini4j</groupId>
-                <artifactId>ini4j</artifactId>
-                <version>0.5.4</version>
             </dependency>
 
             <!-- commons -->

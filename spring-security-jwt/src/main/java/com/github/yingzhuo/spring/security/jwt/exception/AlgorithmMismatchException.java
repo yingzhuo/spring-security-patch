@@ -27,4 +27,5 @@ public class AlgorithmMismatchException extends AuthenticationException {
     public AlgorithmMismatchException(String msg, Throwable t) {
         super(msg, t);
     }
+
 }

@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 /**
  * @author 应卓
  */
-public final class JwtToken implements Authentication {
+public final class JwtToken implements Authentication, java.io.Serializable {
 
     public static JwtToken of(String rawToken) {
         Assert.hasText(rawToken, () -> null);

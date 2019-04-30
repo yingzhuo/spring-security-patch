@@ -7,7 +7,7 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.jwt;
+package com.github.yingzhuo.spring.security.jwt.errorhandler;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -21,7 +21,7 @@ import java.io.IOException;
  * @author 应卓
  */
 @FunctionalInterface
-public interface JwtAuthenticationFailedEntryPoint extends AuthenticationEntryPoint {
+public interface ErrorHandler extends AuthenticationEntryPoint {
 
     /**
      * Commences an authentication scheme.

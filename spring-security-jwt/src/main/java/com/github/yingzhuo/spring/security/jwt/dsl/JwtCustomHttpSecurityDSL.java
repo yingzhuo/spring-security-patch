@@ -10,7 +10,7 @@
 package com.github.yingzhuo.spring.security.jwt.dsl;
 
 import com.github.yingzhuo.spring.security.jwt.AbstractJwtAuthenticationManager;
-import com.github.yingzhuo.spring.security.jwt.JwtAuthenticationFailedEntryPoint;
+import com.github.yingzhuo.spring.security.jwt.errorhandler.ErrorHandler;
 import com.github.yingzhuo.spring.security.jwt.JwtAuthenticationFilter;
 import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import lombok.val;
@@ -38,7 +38,7 @@ public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHt
         val parser = applicationContext.getBean(JwtTokenParser.class);
 
         // 错误处理器
-        val entryPoint = applicationContext.getBean(JwtAuthenticationFailedEntryPoint.class);
+        val errorHandler = applicationContext.getBean(ErrorHandler.class);
 
         // 全局配置
         val props = applicationContext.getBean(JwtCustomAutoConfig.Props.class);
@@ -49,14 +49,14 @@ public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHt
         manager.setSignatureAlgorithm(props.getAlgorithm());
 
         // Jwt处理Filter
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(parser, manager, entryPoint);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(parser, manager, errorHandler);
         filter.afterPropertiesSet();
 
         // 设置Jwt认证过滤器
         http.addFilterBefore(filter, BasicAuthenticationFilter.class);
 
         // 异常处理器
-        http.exceptionHandling().authenticationEntryPoint(entryPoint);
+        http.exceptionHandling().authenticationEntryPoint(errorHandler);
     }
 
 }
