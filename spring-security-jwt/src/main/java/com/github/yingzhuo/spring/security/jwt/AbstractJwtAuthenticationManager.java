@@ -22,6 +22,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.HashSet;
 
 /**
  * @author 应卓
@@ -38,15 +41,38 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
             throw new UnsupportedTokenException();
         }
 
-        final UsernamePasswordAuthenticationToken upt;
-
         try {
             Algorithm algorithm = SignatureAlgorithmUtils.toAlgorithm(signatureAlgorithm, secret);
             final JWTVerifier verifier = JWT.require(algorithm).build();
 
             val rawToken = token.toString();
             DecodedJWT jwt = verifier.verify(rawToken);
-            upt = doAuthenticate(jwt, rawToken);
+            val userDetails = doAuthenticate(rawToken, jwt);
+
+            if (userDetails == null) {
+                throw new UserDetailsNotFoundException();
+            }
+
+            if (!userDetails.isAccountNonExpired()) {
+                throw new UserExpiredException();
+            }
+
+            if (!userDetails.isAccountNonLocked()) {
+                throw new UserLockedException();
+            }
+
+            if (!userDetails.isCredentialsNonExpired()) {
+                throw new CredentialExpiredException();
+            }
+
+            val upt = new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    rawToken,
+                    userDetails.getAuthorities() != null ? userDetails.getAuthorities() : new HashSet<>());
+
+            SecurityContextHolder.getContext().setAuthentication(upt);
+
+            return upt;
 
         } catch (com.auth0.jwt.exceptions.AlgorithmMismatchException ex) {
             throw new AlgorithmMismatchException(ex.getMessage(), ex);
@@ -60,13 +86,9 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
             throw new JwtDecodeException(ex.getMessage(), ex);
         }
 
-        if (upt != null) {
-            SecurityContextHolder.getContext().setAuthentication(upt);
-        }
-        return upt;
     }
 
-    protected abstract UsernamePasswordAuthenticationToken doAuthenticate(DecodedJWT jwt, String rawToken) throws AuthenticationException;
+    protected abstract UserDetails doAuthenticate(String rawToken, DecodedJWT jwt) throws AuthenticationException;
 
     public final void setSignatureAlgorithm(SignatureAlgorithm signatureAlgorithm) {
         this.signatureAlgorithm = signatureAlgorithm;

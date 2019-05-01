@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.Assert;
 
+import java.util.Collections;
+
 /**
  * @author 应卓
  */
@@ -35,17 +37,17 @@ public final class JwtToken implements Authentication, java.io.Serializable {
 
     @Override
     public java.util.Collection<? extends GrantedAuthority> getAuthorities() {
-        throw new UnsupportedOperationException();
+        return Collections.emptySet();
     }
 
     @Override
     public Object getDetails() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
     public boolean isAuthenticated() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     @Override
@@ -55,17 +57,17 @@ public final class JwtToken implements Authentication, java.io.Serializable {
 
     @Override
     public Object getCredentials() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
     public Object getPrincipal() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     // -------------------------------------------------------------------------------------------------------------
