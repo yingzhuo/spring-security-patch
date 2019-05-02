@@ -10,7 +10,7 @@
 package com.github.yingzhuo.spring.security.jwt.dsl;
 
 import com.github.yingzhuo.spring.security.jwt.AbstractJwtAuthenticationManager;
-import com.github.yingzhuo.spring.security.jwt.errorhandler.ErrorHandler;
+import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtErrorHandler;
 import com.github.yingzhuo.spring.security.jwt.JwtAuthenticationFilter;
 import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import lombok.val;
@@ -38,7 +38,7 @@ public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHt
         val parser = applicationContext.getBean(JwtTokenParser.class);
 
         // 错误处理器
-        val errorHandler = applicationContext.getBean(ErrorHandler.class);
+        val errorHandler = applicationContext.getBean(JwtErrorHandler.class);
 
         // 全局配置
         val props = applicationContext.getBean(JwtCustomAutoConfig.Props.class);

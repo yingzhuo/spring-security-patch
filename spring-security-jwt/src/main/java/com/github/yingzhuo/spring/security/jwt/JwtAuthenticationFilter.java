@@ -9,7 +9,7 @@
  */
 package com.github.yingzhuo.spring.security.jwt;
 
-import com.github.yingzhuo.spring.security.jwt.errorhandler.ErrorHandler;
+import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtErrorHandler;
 import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,12 +34,12 @@ public final class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenParser tokenParser;
     private final AbstractJwtAuthenticationManager authManager;
-    private final ErrorHandler errorHandler;
+    private final JwtErrorHandler errorHandler;
 
-    public JwtAuthenticationFilter(JwtTokenParser tokenParser, AbstractJwtAuthenticationManager authManager, ErrorHandler errorHandler) {
+    public JwtAuthenticationFilter(JwtTokenParser tokenParser, AbstractJwtAuthenticationManager authManager, JwtErrorHandler jwtErrorHandler) {
         this.tokenParser = tokenParser;
         this.authManager = authManager;
-        this.errorHandler = errorHandler;
+        this.errorHandler = jwtErrorHandler;
     }
 
     @Override

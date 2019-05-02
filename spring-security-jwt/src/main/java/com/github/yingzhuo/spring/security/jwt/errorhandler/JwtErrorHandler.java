@@ -21,7 +21,7 @@ import java.io.IOException;
  * @author 应卓
  */
 @FunctionalInterface
-public interface ErrorHandler extends AuthenticationEntryPoint {
+public interface JwtErrorHandler extends AuthenticationEntryPoint {
 
     /**
      * Commences an authentication scheme.
