@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.Assert;
 
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -36,7 +37,7 @@ public final class JwtToken implements Authentication, java.io.Serializable {
     }
 
     @Override
-    public java.util.Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptySet();
     }
 
@@ -57,7 +58,7 @@ public final class JwtToken implements Authentication, java.io.Serializable {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return this.rawToken;
     }
 
     @Override

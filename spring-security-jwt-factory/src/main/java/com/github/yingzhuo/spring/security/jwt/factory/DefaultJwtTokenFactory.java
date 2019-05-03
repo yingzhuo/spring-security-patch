@@ -32,29 +32,29 @@ public class DefaultJwtTokenFactory implements JwtTokenFactory {
     }
 
     @Override
-    public String create(JwtTokenInfo info) {
-        Objects.requireNonNull(info);
+    public String create(JwtTokenMeta meta) {
+        Objects.requireNonNull(meta);
 
         JWTCreator.Builder builder = JWT.create();
 
         // Public Claims (Public)
-        Optional.ofNullable(info.getKeyId()).ifPresent(builder::withKeyId);
+        Optional.ofNullable(meta.getKeyId()).ifPresent(builder::withKeyId);
 
         // Public Claims (Payload)
-        Optional.ofNullable(info.getIssuer()).ifPresent(builder::withIssuer);
-        Optional.ofNullable(info.getSubject()).ifPresent(builder::withSubject);
-        Optional.ofNullable(info.getExpiresAt()).ifPresent(builder::withExpiresAt);
-        Optional.ofNullable(info.getNotBefore()).ifPresent(builder::withNotBefore);
-        Optional.ofNullable(info.getIssuedAt()).ifPresent(builder::withIssuedAt);
-        Optional.ofNullable(info.getJwtId()).ifPresent(builder::withJWTId);
-        Optional.ofNullable(info.getAudience()).ifPresent(it -> {
+        Optional.ofNullable(meta.getIssuer()).ifPresent(builder::withIssuer);
+        Optional.ofNullable(meta.getSubject()).ifPresent(builder::withSubject);
+        Optional.ofNullable(meta.getExpiresAt()).ifPresent(builder::withExpiresAt);
+        Optional.ofNullable(meta.getNotBefore()).ifPresent(builder::withNotBefore);
+        Optional.ofNullable(meta.getIssuedAt()).ifPresent(builder::withIssuedAt);
+        Optional.ofNullable(meta.getJwtId()).ifPresent(builder::withJWTId);
+        Optional.ofNullable(meta.getAudience()).ifPresent(it -> {
             if (!it.isEmpty()) {
-                builder.withAudience(info.getAudience().toArray(new String[info.getAudience().size()]));
+                builder.withAudience(meta.getAudience().toArray(new String[meta.getAudience().size()]));
             }
         });
 
         // Private Claims
-        Optional.ofNullable(info.getPrivateClaims()).ifPresent(map -> {
+        Optional.ofNullable(meta.getPrivateClaims()).ifPresent(map -> {
             final Set<String> keySet = map.keySet();
             for (String name : keySet) {
                 Object value = map.get(name);
@@ -101,7 +101,6 @@ public class DefaultJwtTokenFactory implements JwtTokenFactory {
 
                 if (value instanceof Long[]) {
                     builder.withArrayClaim(name, (Long[]) value);
-//                    continue;
                 }
             }
         });

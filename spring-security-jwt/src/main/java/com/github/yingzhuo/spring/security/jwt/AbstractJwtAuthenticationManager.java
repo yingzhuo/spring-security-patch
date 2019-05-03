@@ -85,7 +85,6 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
         } catch (com.auth0.jwt.exceptions.JWTDecodeException ex) {
             throw new JwtDecodeException(ex.getMessage(), ex);
         }
-
     }
 
     protected abstract UserDetails doAuthenticate(String rawToken, DecodedJWT jwt) throws AuthenticationException;

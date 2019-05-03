@@ -9,8 +9,8 @@
  */
 package com.github.yingzhuo.spring.security.jwt.dsl;
 
-import com.github.yingzhuo.spring.security.jwt.parser.DefaultJwtTokenParser;
 import com.github.yingzhuo.spring.security.jwt.algorithm.SignatureAlgorithm;
+import com.github.yingzhuo.spring.security.jwt.parser.DefaultJwtTokenParser;
 import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import lombok.Getter;
 import lombok.Setter;

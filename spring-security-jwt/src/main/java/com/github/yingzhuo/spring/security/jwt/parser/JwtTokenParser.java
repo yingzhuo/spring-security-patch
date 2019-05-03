@@ -17,8 +17,13 @@ import java.util.Optional;
 /**
  * @author 应卓
  */
+@FunctionalInterface
 public interface JwtTokenParser {
 
     public Optional<JwtToken> parse(HttpServletRequest request);
+
+    public default String parseAsString(HttpServletRequest request) {
+        return parse(request).map(JwtToken::getRawToken).orElse(null);
+    }
 
 }

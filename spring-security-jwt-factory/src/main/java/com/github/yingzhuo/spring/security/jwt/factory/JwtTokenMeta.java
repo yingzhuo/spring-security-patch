@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  */
 @Getter
 @Setter
-public class JwtTokenInfo implements Serializable {
+public class JwtTokenMeta implements Serializable {
 
     private static final long serialVersionUID = -846791671276090816L;
 
@@ -40,7 +40,7 @@ public class JwtTokenInfo implements Serializable {
     // Private Claims
     private Map<String, Object> privateClaims = new HashMap<>(0);
 
-    private JwtTokenInfo() {
+    private JwtTokenMeta() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class JwtTokenInfo implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        JwtTokenInfo that = (JwtTokenInfo) o;
+        JwtTokenMeta that = (JwtTokenMeta) o;
         return Objects.equals(keyId, that.keyId) &&
                 Objects.equals(issuer, that.issuer) &&
                 Objects.equals(subject, that.subject) &&
@@ -205,18 +205,18 @@ public class JwtTokenInfo implements Serializable {
             return this;
         }
 
-        public JwtTokenInfo build() {
-            JwtTokenInfo info = new JwtTokenInfo();
-            info.jwtId = this.jwtId;
-            info.keyId = this.keyId;
-            info.issuer = this.issuer;
-            info.subject = this.subject;
-            info.audience = this.audience;
-            info.expiresAt = this.expiresAt;
-            info.notBefore = this.notBefore;
-            info.issuedAt = this.issuedAt;
-            info.privateClaims = this.privateClaims;
-            return info;
+        public JwtTokenMeta build() {
+            JwtTokenMeta meta = new JwtTokenMeta();
+            meta.jwtId = this.jwtId;
+            meta.keyId = this.keyId;
+            meta.issuer = this.issuer;
+            meta.subject = this.subject;
+            meta.audience = this.audience;
+            meta.expiresAt = this.expiresAt;
+            meta.notBefore = this.notBefore;
+            meta.issuedAt = this.issuedAt;
+            meta.privateClaims = this.privateClaims;
+            return meta;
         }
     }
 

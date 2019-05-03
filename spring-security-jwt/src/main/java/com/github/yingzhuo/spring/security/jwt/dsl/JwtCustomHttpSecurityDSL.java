@@ -10,14 +10,13 @@
 package com.github.yingzhuo.spring.security.jwt.dsl;
 
 import com.github.yingzhuo.spring.security.jwt.AbstractJwtAuthenticationManager;
-import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtErrorHandler;
 import com.github.yingzhuo.spring.security.jwt.JwtAuthenticationFilter;
+import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtErrorHandler;
 import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import lombok.val;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
@@ -27,9 +26,6 @@ public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHt
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-
-        // session 创建策略
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Spring's ApplicationContext
         val applicationContext = http.getSharedObject(ApplicationContext.class);

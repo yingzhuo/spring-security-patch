@@ -9,11 +9,18 @@
  */
 package com.github.yingzhuo.spring.security.jwt.factory;
 
+import java.util.Objects;
+
 /**
  * @author 应卓
  */
+@FunctionalInterface
 public interface JwtTokenFactory {
 
-    public String create(JwtTokenInfo entity);
+    public String create(JwtTokenMeta meta);
+
+    public default String create(JwtTokenMeta.Builder builder) {
+        return create(Objects.requireNonNull(builder).build());
+    }
 
 }
