@@ -21,6 +21,7 @@ import java.util.Set;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 public class DefaultJwtTokenFactory implements JwtTokenFactory {
 

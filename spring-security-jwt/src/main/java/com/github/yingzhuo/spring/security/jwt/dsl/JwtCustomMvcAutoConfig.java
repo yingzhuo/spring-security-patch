@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 @ConditionalOnWebApplication
 @AutoConfigureAfter(JwtCustomAutoConfig.class)

@@ -13,6 +13,7 @@ import java.util.Objects;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 @FunctionalInterface
 public interface JwtTokenFactory {

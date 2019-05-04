@@ -23,7 +23,9 @@ import java.util.Objects;
  * 内部使用工具
  *
  * @author 应卓
+ * @since 1.0.0
  */
+@SuppressWarnings("all")
 public final class SignatureAlgorithmUtils {
 
     private SignatureAlgorithmUtils() {

@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 @Getter
 @Setter
@@ -37,6 +38,7 @@ public class JwtTokenMeta implements Serializable {
     private Date notBefore;
     private Date issuedAt;
     private String jwtId;
+
     // Private Claims
     private Map<String, Object> privateClaims = new HashMap<>(0);
 

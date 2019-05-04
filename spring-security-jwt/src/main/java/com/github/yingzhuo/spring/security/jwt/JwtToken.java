@@ -18,6 +18,7 @@ import java.util.Collections;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 public final class JwtToken implements Authentication, java.io.Serializable {
 

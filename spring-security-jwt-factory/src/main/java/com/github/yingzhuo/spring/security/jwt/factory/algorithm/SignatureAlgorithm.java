@@ -11,6 +11,7 @@ package com.github.yingzhuo.spring.security.jwt.factory.algorithm;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 public enum SignatureAlgorithm {
 

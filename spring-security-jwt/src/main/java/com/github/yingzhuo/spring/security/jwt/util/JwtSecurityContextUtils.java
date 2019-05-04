@@ -16,6 +16,7 @@ import java.util.Optional;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 @SuppressWarnings("unchecked")
 public final class JwtSecurityContextUtils {

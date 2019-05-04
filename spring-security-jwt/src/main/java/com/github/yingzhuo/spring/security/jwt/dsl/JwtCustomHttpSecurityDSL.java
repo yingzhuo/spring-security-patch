@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHttpSecurityDSL, HttpSecurity> {
 

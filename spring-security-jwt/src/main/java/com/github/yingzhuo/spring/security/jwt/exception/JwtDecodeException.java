@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 public class JwtDecodeException extends AuthenticationException {
 

@@ -10,6 +10,7 @@
 package com.github.yingzhuo.spring.security.jwt.dsl;
 
 import com.github.yingzhuo.spring.security.jwt.algorithm.SignatureAlgorithm;
+import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtErrorHandler;
 import com.github.yingzhuo.spring.security.jwt.parser.DefaultJwtTokenParser;
 import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import lombok.Getter;
@@ -33,6 +34,13 @@ public class JwtCustomAutoConfig {
     @ConditionalOnMissingBean
     public JwtTokenParser jwtTokenParser() {
         return new DefaultJwtTokenParser();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public JwtErrorHandler jwtErrorHandler() {
+        return new JwtErrorHandler() {
+        };
     }
 
     // -----------------------------------------------------------------------------------------------------------

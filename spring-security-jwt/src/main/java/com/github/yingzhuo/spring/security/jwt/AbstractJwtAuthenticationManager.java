@@ -28,6 +28,7 @@ import java.util.HashSet;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 public abstract class AbstractJwtAuthenticationManager implements AuthenticationManager {
 
