@@ -14,7 +14,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.yingzhuo.spring.security.jwt.algorithm.SignatureAlgorithm;
-import com.github.yingzhuo.spring.security.jwt.algorithm.SignatureAlgorithmUtils;
 import com.github.yingzhuo.spring.security.jwt.exception.*;
 import lombok.val;
 import org.springframework.lang.Nullable;
@@ -44,7 +43,7 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
         }
 
         try {
-            Algorithm algorithm = SignatureAlgorithmUtils.toAlgorithm(signatureAlgorithm, secret);
+            Algorithm algorithm = SignatureAlgorithm.gen(signatureAlgorithm, secret);
             final JWTVerifier verifier = JWT.require(algorithm).build();
 
             val rawToken = token.toString();

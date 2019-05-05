@@ -19,10 +19,9 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @SuppressWarnings("unchecked")
-public final class JwtSecurityContextUtils {
+public final class JwtSecurityContext {
 
-    private JwtSecurityContextUtils() {
-        super();
+    private JwtSecurityContext() {
     }
 
     public static Object getPrincipal() {
@@ -39,6 +38,14 @@ public final class JwtSecurityContextUtils {
 
     public static UserDetails getUserDetails() {
         return getPrincipal(UserDetails.class);
+    }
+
+    public static String getUsername() {
+        try {
+            return getUserDetails().getUsername();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static Object getCredentials() {

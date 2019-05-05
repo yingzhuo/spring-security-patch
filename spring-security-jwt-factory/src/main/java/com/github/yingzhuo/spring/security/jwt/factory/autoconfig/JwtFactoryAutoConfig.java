@@ -64,4 +64,5 @@ public class JwtFactoryAutoConfig {
     static class PropsFactory {
         private boolean enabled = true;
     }
+
 }

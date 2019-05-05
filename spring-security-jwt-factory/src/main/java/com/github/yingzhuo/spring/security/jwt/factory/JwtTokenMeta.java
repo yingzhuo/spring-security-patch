@@ -26,8 +26,6 @@ import java.util.function.Supplier;
 @Setter
 public class JwtTokenMeta implements Serializable {
 
-    private static final long serialVersionUID = -846791671276090816L;
-
     // Public Claims (Header)
     private String keyId;
     private String issuer;
