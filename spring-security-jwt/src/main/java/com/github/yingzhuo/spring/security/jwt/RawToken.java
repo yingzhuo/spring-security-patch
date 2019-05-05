@@ -16,7 +16,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.*;
 
 /**
@@ -45,7 +44,7 @@ public @interface RawToken {
 
         @Override
         public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-            return jwtTokenParser.parseAsString(webRequest.getNativeRequest(HttpServletRequest.class));
+            return jwtTokenParser.parseAsString(webRequest);
         }
     }
 
