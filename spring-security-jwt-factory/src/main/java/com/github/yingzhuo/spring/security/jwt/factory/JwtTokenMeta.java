@@ -9,7 +9,6 @@
  */
 package com.github.yingzhuo.spring.security.jwt.factory;
 
-import com.github.yingzhuo.spring.security.jwt.factory.util.DateUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,7 +42,6 @@ public class JwtTokenMeta implements Serializable {
     private Map<String, Object> privateClaims = new HashMap<>(0);
 
     private JwtTokenMeta() {
-        super();
     }
 
     @Override
@@ -82,10 +80,9 @@ public class JwtTokenMeta implements Serializable {
         private Date notBefore;
         private Date issuedAt;
         private String jwtId;
-        private Map<String, Object> privateClaims = new HashMap<>(0);
+        private Map<String, Object> privateClaims = new HashMap<>();
 
         private Builder() {
-            super();
         }
 
         public Builder keyId(String keyId) {
@@ -116,19 +113,13 @@ public class JwtTokenMeta implements Serializable {
             return audience(Arrays.asList(audience));
         }
 
-        public Builder audience(String audience) {
-            List<String> list = new ArrayList<>(1);
-            list.add(audience);
-            return audience(list);
-        }
-
         public Builder expiresAt(Date expiresAt) {
             this.expiresAt = expiresAt;
             return this;
         }
 
         public Builder expiresAtFuture(long duration, TimeUnit timeUnit) {
-            return expiresAt(DateUtils.afterNow(duration, timeUnit));
+            return expiresAt(afterNow(duration, timeUnit));
         }
 
         public Builder expiresAtFuture(Duration duration) {
@@ -141,7 +132,7 @@ public class JwtTokenMeta implements Serializable {
         }
 
         public Builder notBeforeFuture(long duration, TimeUnit timeUnit) {
-            return notBefore(DateUtils.afterNow(duration, timeUnit));
+            return notBefore(this.afterNow(duration, timeUnit));
         }
 
         public Builder notBeforeFuture(Duration duration) {
@@ -167,42 +158,44 @@ public class JwtTokenMeta implements Serializable {
         }
 
         public Builder putPrivateClaim(String key, Boolean value) {
-            return putPrivateClaim(key, (Object) value);
+            return doPutPrivateClaim(key, value);
         }
 
         public Builder putPrivateClaim(String key, Date value) {
-            return putPrivateClaim(key, (Object) value);
+            return doPutPrivateClaim(key, value);
         }
 
         public Builder putPrivateClaim(String key, Double value) {
-            return putPrivateClaim(key, (Object) value);
+            return doPutPrivateClaim(key, value);
         }
 
         public Builder putPrivateClaim(String key, String value) {
-            return putPrivateClaim(key, (Object) value);
+            return doPutPrivateClaim(key, value);
         }
 
         public Builder putPrivateClaim(String key, String[] value) {
-            return putPrivateClaim(key, (Object) value);
+            return doPutPrivateClaim(key, value);
         }
 
         public Builder putPrivateClaim(String key, Integer value) {
-            return putPrivateClaim(key, (Object) value);
+            return doPutPrivateClaim(key, value);
         }
 
         public Builder putPrivateClaim(String key, Integer[] value) {
-            return putPrivateClaim(key, (Object) value);
+            return doPutPrivateClaim(key, value);
         }
 
         public Builder putPrivateClaim(String key, Long value) {
-            return putPrivateClaim(key, (Object) value);
+            return doPutPrivateClaim(key, value);
         }
 
         public Builder putPrivateClaim(String key, Long[] value) {
-            return putPrivateClaim(key, (Object) value);
+            return doPutPrivateClaim(key, value);
         }
 
-        private Builder putPrivateClaim(String key, Object value) {
+        private Builder doPutPrivateClaim(String key, Object value) {
+            Objects.requireNonNull(key);
+            Objects.requireNonNull(value);
             this.privateClaims.put(key, value);
             return this;
         }
@@ -219,6 +212,12 @@ public class JwtTokenMeta implements Serializable {
             meta.issuedAt = this.issuedAt;
             meta.privateClaims = this.privateClaims;
             return meta;
+        }
+
+        // 工具方法
+        private Date afterNow(long duration, TimeUnit timeUnit) {
+            Objects.requireNonNull(timeUnit);
+            return new Date(System.currentTimeMillis() + timeUnit.toMillis(duration));
         }
     }
 

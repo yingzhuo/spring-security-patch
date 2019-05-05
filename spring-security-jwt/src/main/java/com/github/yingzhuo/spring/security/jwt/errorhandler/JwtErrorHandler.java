@@ -10,7 +10,6 @@
 package com.github.yingzhuo.spring.security.jwt.errorhandler;
 
 import com.github.yingzhuo.spring.security.jwt.exception.*;
-import org.apache.commons.io.IOUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -98,7 +97,7 @@ public interface JwtErrorHandler extends AuthenticationEntryPoint {
 
     public default void handleDefault(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        IOUtils.write("403", response.getOutputStream(), StandardCharsets.UTF_8);
+        response.getOutputStream().write("403".getBytes(StandardCharsets.UTF_8));
     }
 
     public default void handleAlgorithmMismatchException(HttpServletRequest request, HttpServletResponse response, AlgorithmMismatchException authException) throws IOException {

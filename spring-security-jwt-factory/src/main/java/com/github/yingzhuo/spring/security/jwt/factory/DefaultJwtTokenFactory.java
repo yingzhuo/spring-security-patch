@@ -36,7 +36,7 @@ public class DefaultJwtTokenFactory implements JwtTokenFactory {
     public String create(JwtTokenMeta meta) {
         Objects.requireNonNull(meta);
 
-        JWTCreator.Builder builder = JWT.create();
+        final JWTCreator.Builder builder = JWT.create();
 
         // Public Claims (Public)
         Optional.ofNullable(meta.getKeyId()).ifPresent(builder::withKeyId);
@@ -50,7 +50,7 @@ public class DefaultJwtTokenFactory implements JwtTokenFactory {
         Optional.ofNullable(meta.getJwtId()).ifPresent(builder::withJWTId);
         Optional.ofNullable(meta.getAudience()).ifPresent(it -> {
             if (!it.isEmpty()) {
-                builder.withAudience(meta.getAudience().toArray(new String[meta.getAudience().size()]));
+                builder.withAudience(meta.getAudience().toArray(new String[0]));
             }
         });
 

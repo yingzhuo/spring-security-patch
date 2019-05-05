@@ -26,6 +26,7 @@ import org.springframework.util.Assert;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 @ConditionalOnProperty(prefix = "spring.security.jwt.factory", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(JwtFactoryAutoConfig.Props.class)

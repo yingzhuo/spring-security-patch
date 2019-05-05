@@ -25,6 +25,7 @@ import org.springframework.util.Assert;
 
 /**
  * @author 应卓
+ * @since 1.0.0
  */
 @ConditionalOnWebApplication
 @EnableConfigurationProperties(JwtCustomAutoConfig.Props.class)
