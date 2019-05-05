@@ -10,8 +10,8 @@
 package com.github.yingzhuo.spring.security.jwt.parser;
 
 import com.github.yingzhuo.spring.security.jwt.JwtToken;
+import org.springframework.web.context.request.NativeWebRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 /**
@@ -25,7 +25,7 @@ public class DefaultJwtTokenParser implements JwtTokenParser {
     private static final int BEARER_LEN = BEARER.length();
 
     @Override
-    public Optional<JwtToken> parse(HttpServletRequest request) {
+    public Optional<JwtToken> parse(NativeWebRequest request) {
 
         final String headerValue = request.getHeader(AUTHORIZATION);
 

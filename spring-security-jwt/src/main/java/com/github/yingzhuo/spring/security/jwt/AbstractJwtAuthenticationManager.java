@@ -17,6 +17,7 @@ import com.github.yingzhuo.spring.security.jwt.algorithm.SignatureAlgorithm;
 import com.github.yingzhuo.spring.security.jwt.algorithm.SignatureAlgorithmUtils;
 import com.github.yingzhuo.spring.security.jwt.exception.*;
 import lombok.val;
+import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,6 +49,7 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
 
             val rawToken = token.toString();
             DecodedJWT jwt = verifier.verify(rawToken);
+
             val userDetails = doAuthenticate(rawToken, jwt);
 
             if (userDetails == null) {
@@ -88,6 +90,7 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
         }
     }
 
+    @Nullable
     protected abstract UserDetails doAuthenticate(String rawToken, DecodedJWT jwt) throws AuthenticationException;
 
     public final void setSignatureAlgorithm(SignatureAlgorithm signatureAlgorithm) {

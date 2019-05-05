@@ -10,8 +10,10 @@
 package com.github.yingzhuo.spring.security.jwt.parser;
 
 import com.github.yingzhuo.spring.security.jwt.JwtToken;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+import org.springframework.web.context.request.NativeWebRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 /**
@@ -21,9 +23,11 @@ import java.util.Optional;
 @FunctionalInterface
 public interface JwtTokenParser {
 
-    public Optional<JwtToken> parse(HttpServletRequest request);
+    @NonNull
+    public Optional<JwtToken> parse(NativeWebRequest request);
 
-    public default String parseAsString(HttpServletRequest request) {
+    @Nullable
+    public default String parseAsString(NativeWebRequest request) {
         return parse(request).map(JwtToken::getRawToken).orElse(null);
     }
 

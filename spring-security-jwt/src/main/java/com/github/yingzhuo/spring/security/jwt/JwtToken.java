@@ -76,7 +76,7 @@ public final class JwtToken implements Authentication, java.io.Serializable {
 
     @Override
     public String toString() {
-        return rawToken;
+        return getRawToken();
     }
 
 }
