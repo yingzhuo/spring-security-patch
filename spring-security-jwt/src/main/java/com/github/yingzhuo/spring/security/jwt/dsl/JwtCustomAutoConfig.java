@@ -10,7 +10,6 @@
 package com.github.yingzhuo.spring.security.jwt.dsl;
 
 import com.github.yingzhuo.spring.security.jwt.algorithm.SignatureAlgorithm;
-import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtErrorHandler;
 import com.github.yingzhuo.spring.security.jwt.parser.DefaultJwtTokenParser;
 import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import lombok.Getter;
@@ -37,13 +36,6 @@ public class JwtCustomAutoConfig {
         return new DefaultJwtTokenParser();
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public JwtErrorHandler jwtErrorHandler() {
-        return new JwtErrorHandler() {
-        };
-    }
-
     // -----------------------------------------------------------------------------------------------------------
 
     @Getter
@@ -52,6 +44,7 @@ public class JwtCustomAutoConfig {
     static class Props implements InitializingBean {
         private SignatureAlgorithm algorithm = SignatureAlgorithm.HMAC512;
         private String secret = "https://github.com/yingzhuo/spring-security-patch";
+        private boolean dslEnabled = true;
 
         @Override
         public void afterPropertiesSet() {

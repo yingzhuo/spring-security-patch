@@ -191,6 +191,11 @@ public class JwtTokenMeta implements Serializable {
             return doPutPrivateClaim(key, value);
         }
 
+        // since v1.0.2
+        public Builder randomPrivateClaim() {
+            return doPutPrivateClaim("_random_", randomString());
+        }
+
         private Builder doPutPrivateClaim(String key, Object value) {
             Objects.requireNonNull(key);
             Objects.requireNonNull(value);
@@ -212,10 +217,13 @@ public class JwtTokenMeta implements Serializable {
             return meta;
         }
 
-        // 工具方法
         private Date afterNow(long duration, TimeUnit timeUnit) {
             Objects.requireNonNull(timeUnit);
             return new Date(System.currentTimeMillis() + timeUnit.toMillis(duration));
+        }
+
+        private String randomString() {
+            return UUID.randomUUID().toString().replaceAll("-", "");
         }
     }
 

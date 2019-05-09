@@ -29,19 +29,13 @@ public class DefaultJwtTokenParser implements JwtTokenParser {
 
         final String headerValue = request.getHeader(AUTHORIZATION);
 
-        if (headerValue == null) {
+        if (headerValue == null ||
+                !headerValue.startsWith(BEARER) ||
+                headerValue.split("\\.").length != 3) {
             return Optional.empty();
         }
 
-        if (!headerValue.startsWith(BEARER)) {
-            return Optional.empty();
-        }
-
-        String rawToken = headerValue.substring(BEARER_LEN);
-
-        return Optional.of(
-                JwtToken.of(rawToken)
-        );
+        return Optional.of(JwtToken.of(headerValue.substring(BEARER_LEN)));
     }
 
 }

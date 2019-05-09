@@ -9,11 +9,11 @@
  */
 package com.github.yingzhuo.spring.security.jwt;
 
-import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtErrorHandler;
 import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -30,16 +30,16 @@ import java.util.Optional;
  * @author 应卓
  * @since 1.0.0
  */
-public final class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenParser tokenParser;
-    private final AbstractJwtAuthenticationManager authManager;
-    private final JwtErrorHandler errorHandler;
+    private JwtTokenParser tokenParser;
+    private AbstractJwtAuthenticationManager authManager;
+    private AuthenticationEntryPoint authenticationEntryPoint;
 
-    public JwtAuthenticationFilter(JwtTokenParser tokenParser, AbstractJwtAuthenticationManager authManager, JwtErrorHandler jwtErrorHandler) {
+    public JwtAuthenticationFilter(JwtTokenParser tokenParser, AbstractJwtAuthenticationManager authManager, AuthenticationEntryPoint authenticationEntryPoint) {
         this.tokenParser = tokenParser;
         this.authManager = authManager;
-        this.errorHandler = jwtErrorHandler;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Override
@@ -47,7 +47,7 @@ public final class JwtAuthenticationFilter extends OncePerRequestFilter {
         super.afterPropertiesSet();
         Assert.notNull(tokenParser, () -> null);
         Assert.notNull(authManager, () -> null);
-        Assert.notNull(errorHandler, () -> null);
+        Assert.notNull(authenticationEntryPoint, () -> null);
     }
 
     @Override
@@ -68,11 +68,23 @@ public final class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (AuthenticationException failed) {
 
             SecurityContextHolder.clearContext();
-            errorHandler.commence(request, response, failed);
+            authenticationEntryPoint.commence(request, response, failed);
             return;
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    public void setTokenParser(JwtTokenParser tokenParser) {
+        this.tokenParser = tokenParser;
+    }
+
+    public void setAuthManager(AbstractJwtAuthenticationManager authManager) {
+        this.authManager = authManager;
+    }
+
+    public void setAuthenticationEntryPoint(AuthenticationEntryPoint authenticationEntryPoint) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
 }

@@ -11,6 +11,7 @@ package com.github.yingzhuo.spring.security.jwt.factory;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.github.yingzhuo.spring.security.jwt.factory.algorithm.SignatureAlgorithm;
 
 import java.util.Date;
@@ -24,10 +25,10 @@ import java.util.Set;
  */
 public class DefaultJwtTokenFactory implements JwtTokenFactory {
 
-    private String secret;
-    private SignatureAlgorithm signatureAlgorithm;
+    private final Algorithm alg;
 
-    public DefaultJwtTokenFactory() {
+    public DefaultJwtTokenFactory(SignatureAlgorithm signatureAlgorithm, String secret) {
+        this.alg = SignatureAlgorithm.gen(signatureAlgorithm, secret);
     }
 
     @Override
@@ -104,15 +105,7 @@ public class DefaultJwtTokenFactory implements JwtTokenFactory {
             }
         });
 
-        return builder.sign(SignatureAlgorithm.gen(signatureAlgorithm, secret));
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
-
-    public void setSignatureAlgorithm(SignatureAlgorithm signatureAlgorithm) {
-        this.signatureAlgorithm = signatureAlgorithm;
+        return builder.sign(alg);
     }
 
 }

@@ -14,9 +14,8 @@ import com.github.yingzhuo.spring.security.jwt.factory.JwtTokenFactory;
 import com.github.yingzhuo.spring.security.jwt.factory.algorithm.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,20 +27,15 @@ import org.springframework.util.Assert;
  * @author 应卓
  * @since 1.0.0
  */
+@Slf4j
 @ConditionalOnProperty(prefix = "spring.security.jwt.factory", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(JwtFactoryAutoConfig.Props.class)
 public class JwtFactoryAutoConfig {
 
-    @Autowired
-    private Props props;
-
     @Bean
     @ConditionalOnMissingBean
-    public JwtTokenFactory jwtTokenFactory() {
-        val factory = new DefaultJwtTokenFactory();
-        factory.setSecret(props.getSecret());
-        factory.setSignatureAlgorithm(props.algorithm);
-        return factory;
+    public JwtTokenFactory jwtTokenFactory(Props props) {
+        return new DefaultJwtTokenFactory(props.getAlgorithm(), props.getSecret());
     }
 
     @Getter

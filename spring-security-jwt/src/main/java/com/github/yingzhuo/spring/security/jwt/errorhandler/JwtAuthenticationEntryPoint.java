@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
  * @author 应卓
  * @since 1.0.0
  */
-public interface JwtErrorHandler extends AuthenticationEntryPoint {
+public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     /**
      * Commences an authentication scheme.
@@ -40,7 +40,7 @@ public interface JwtErrorHandler extends AuthenticationEntryPoint {
      * @param authException that caused the invocation
      */
     @Override
-    public default void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
 
         if (authException instanceof AlgorithmMismatchException) {
             handleAlgorithmMismatchException(request, response, (AlgorithmMismatchException) authException);
@@ -95,48 +95,48 @@ public interface JwtErrorHandler extends AuthenticationEntryPoint {
         handleDefault(request, response, authException);
     }
 
-    public default void handleDefault(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+    protected void handleDefault(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.getOutputStream().write("403".getBytes(StandardCharsets.UTF_8));
     }
 
-    public default void handleAlgorithmMismatchException(HttpServletRequest request, HttpServletResponse response, AlgorithmMismatchException authException) throws IOException {
+    protected void handleAlgorithmMismatchException(HttpServletRequest request, HttpServletResponse response, AlgorithmMismatchException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
-    public default void handleInvalidClaimException(HttpServletRequest request, HttpServletResponse response, InvalidClaimException authException) throws IOException {
+    protected void handleInvalidClaimException(HttpServletRequest request, HttpServletResponse response, InvalidClaimException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
-    public default void handleJwtDecodeException(HttpServletRequest request, HttpServletResponse response, JwtDecodeException authException) throws IOException {
+    protected void handleJwtDecodeException(HttpServletRequest request, HttpServletResponse response, JwtDecodeException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
-    public default void handleSignatureVerificationException(HttpServletRequest request, HttpServletResponse response, SignatureVerificationException authException) throws IOException {
+    protected void handleSignatureVerificationException(HttpServletRequest request, HttpServletResponse response, SignatureVerificationException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
-    public default void handleTokenExpiredException(HttpServletRequest request, HttpServletResponse response, TokenExpiredException authException) throws IOException {
+    protected void handleTokenExpiredException(HttpServletRequest request, HttpServletResponse response, TokenExpiredException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
-    public default void handleUnsupportedTokenException(HttpServletRequest request, HttpServletResponse response, UnsupportedTokenException authException) throws IOException {
+    protected void handleUnsupportedTokenException(HttpServletRequest request, HttpServletResponse response, UnsupportedTokenException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
-    public default void handleUserDetailsNotFoundException(HttpServletRequest request, HttpServletResponse response, UserDetailsNotFoundException authException) throws IOException {
+    protected void handleUserDetailsNotFoundException(HttpServletRequest request, HttpServletResponse response, UserDetailsNotFoundException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
-    public default void handleCredentialExpiredException(HttpServletRequest request, HttpServletResponse response, CredentialExpiredException authException) throws IOException {
+    protected void handleCredentialExpiredException(HttpServletRequest request, HttpServletResponse response, CredentialExpiredException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
-    public default void handleUserExpiredException(HttpServletRequest request, HttpServletResponse response, UserExpiredException authException) throws IOException {
+    protected void handleUserExpiredException(HttpServletRequest request, HttpServletResponse response, UserExpiredException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
-    public default void handleUserLockedException(HttpServletRequest request, HttpServletResponse response, UserLockedException authException) throws IOException {
+    protected void handleUserLockedException(HttpServletRequest request, HttpServletResponse response, UserLockedException authException) throws IOException {
         handleDefault(request, response, authException);
     }
 
