@@ -10,7 +10,7 @@
 ## License
 
 ```
-Copyright 2013-2018 Guoqiang Chen, Shanghai, China. All rights reserved.
+Copyright 2013-2018 Zhuo YING, Shanghai, China. All rights reserved.
 
   Author: yingzhuo
    Email: yingzhor@gmail.com
