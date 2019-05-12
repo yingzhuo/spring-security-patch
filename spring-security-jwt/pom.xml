@@ -6,7 +6,7 @@
     <parent>
         <artifactId>spring-security-patch</artifactId>
         <groupId>com.github.yingzhuo</groupId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spring-security-jwt</artifactId>
