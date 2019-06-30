@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.yingzhuo</groupId>
     <artifactId>spring-security-patch</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <modules>
         <module>spring-security-jwt</module>
         <module>spring-security-jwt-factory</module>
@@ -356,7 +356,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>27.1-jre</version>
+                <version>28.0-jre</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
