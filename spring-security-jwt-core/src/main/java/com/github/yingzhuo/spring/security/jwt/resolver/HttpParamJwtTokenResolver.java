@@ -7,28 +7,40 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.jwt.parser;
+package com.github.yingzhuo.spring.security.jwt.resolver;
 
 import com.github.yingzhuo.spring.security.jwt.JwtToken;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.Optional;
 
 /**
  * @author 应卓
- * @since 1.0.0
+ * @since 1.1.0
  */
-@FunctionalInterface
-public interface JwtTokenParser {
+public class HttpParamJwtTokenResolver implements JwtTokenResolver {
 
-    @NonNull
-    public Optional<JwtToken> parse(NativeWebRequest request);
+    private final String paramName;
+    private final String prefix;
+    private final int prefixLen;
 
-    @Nullable
-    public default String parseAsString(NativeWebRequest request) {
-        return parse(request).map(JwtToken::getRawToken).orElse(null);
+    public HttpParamJwtTokenResolver(String paramName, String prefix) {
+        this.paramName = paramName;
+        this.prefix = prefix;
+        this.prefixLen = prefix.length();
+    }
+
+    @Override
+    public Optional<JwtToken> resolve(NativeWebRequest request) {
+        final String paramValue = request.getParameter(paramName);
+
+        if (paramValue == null ||
+                !paramValue.startsWith(prefix) ||
+                paramValue.split("\\.").length != 3) {
+            return Optional.empty();
+        }
+
+        return Optional.of(JwtToken.of(paramValue.substring(prefixLen)));
     }
 
 }

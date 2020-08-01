@@ -98,6 +98,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     protected void handleDefault(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.getOutputStream().write("403".getBytes(StandardCharsets.UTF_8));
+        response.getOutputStream().flush();
     }
 
     protected void handleAlgorithmMismatchException(HttpServletRequest request, HttpServletResponse response, AlgorithmMismatchException authException) throws IOException {

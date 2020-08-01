@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  */
 @Getter
 @Setter
-public class JwtTokenMeta implements Serializable {
+public final class JwtTokenMetadata implements Serializable {
 
     // Public Claims (Header)
     private String keyId;
@@ -39,7 +39,7 @@ public class JwtTokenMeta implements Serializable {
     // Private Claims
     private Map<String, Object> privateClaims = new HashMap<>(0);
 
-    private JwtTokenMeta() {
+    private JwtTokenMetadata() {
     }
 
     public static Builder builder() {
@@ -50,7 +50,7 @@ public class JwtTokenMeta implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        JwtTokenMeta that = (JwtTokenMeta) o;
+        JwtTokenMetadata that = (JwtTokenMetadata) o;
         return Objects.equals(keyId, that.keyId) &&
                 Objects.equals(issuer, that.issuer) &&
                 Objects.equals(subject, that.subject) &&
@@ -203,8 +203,8 @@ public class JwtTokenMeta implements Serializable {
             return this;
         }
 
-        public JwtTokenMeta build() {
-            JwtTokenMeta meta = new JwtTokenMeta();
+        public JwtTokenMetadata build() {
+            JwtTokenMetadata meta = new JwtTokenMetadata();
             meta.jwtId = this.jwtId;
             meta.keyId = this.keyId;
             meta.issuer = this.issuer;

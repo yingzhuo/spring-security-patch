@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 public class JwtFactoryAutoConfig {
 
     @Autowired(required = false)
-    private AlgorithmFactory algorithmFactory = AlgorithmFactories.hmac384(AlgorithmFactories.class.getName());
+    private AlgorithmFactory algorithmFactory = AlgorithmFactories.getDefault();
 
     @Bean
     @ConditionalOnMissingBean

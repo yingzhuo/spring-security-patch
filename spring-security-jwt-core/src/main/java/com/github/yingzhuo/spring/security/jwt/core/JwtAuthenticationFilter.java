@@ -11,7 +11,7 @@ package com.github.yingzhuo.spring.security.jwt.core;
 
 import com.github.yingzhuo.spring.security.jwt.AbstractJwtAuthenticationManager;
 import com.github.yingzhuo.spring.security.jwt.JwtToken;
-import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
+import com.github.yingzhuo.spring.security.jwt.resolver.JwtTokenResolver;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,11 +34,11 @@ import java.util.Optional;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private JwtTokenParser tokenParser;
+    private JwtTokenResolver tokenParser;
     private AbstractJwtAuthenticationManager authManager;
     private AuthenticationEntryPoint authenticationEntryPoint;
 
-    public JwtAuthenticationFilter(JwtTokenParser tokenParser, AbstractJwtAuthenticationManager authManager, AuthenticationEntryPoint authenticationEntryPoint) {
+    public JwtAuthenticationFilter(JwtTokenResolver tokenParser, AbstractJwtAuthenticationManager authManager, AuthenticationEntryPoint authenticationEntryPoint) {
         this.tokenParser = tokenParser;
         this.authManager = authManager;
         this.authenticationEntryPoint = authenticationEntryPoint;
@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        Optional<JwtToken> tokenOption = tokenParser.parse(new ServletWebRequest(request, response));
+        Optional<JwtToken> tokenOption = tokenParser.resolve(new ServletWebRequest(request, response));
 
         try {
             if (tokenOption.isPresent()) {
@@ -77,7 +77,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    public void setTokenParser(JwtTokenParser tokenParser) {
+    public void setTokenParser(JwtTokenResolver tokenParser) {
         this.tokenParser = tokenParser;
     }
 

@@ -26,6 +26,10 @@ public final class AlgorithmFactories {
     private AlgorithmFactories() {
     }
 
+    public static AlgorithmFactory getDefault() {
+        return hmac512(AlgorithmFactories.class.getName());
+    }
+
     public static AlgorithmFactory none() {
         return Algorithm::none;
     }

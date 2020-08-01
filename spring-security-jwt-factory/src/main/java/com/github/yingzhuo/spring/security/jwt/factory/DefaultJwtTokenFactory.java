@@ -32,7 +32,7 @@ public class DefaultJwtTokenFactory implements JwtTokenFactory {
     }
 
     @Override
-    public String create(JwtTokenMeta meta) {
+    public String create(JwtTokenMetadata meta) {
         Objects.requireNonNull(meta);
 
         final JWTCreator.Builder builder = JWT.create();

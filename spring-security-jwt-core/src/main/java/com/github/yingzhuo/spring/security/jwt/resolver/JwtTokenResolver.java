@@ -7,35 +7,26 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.jwt.parser;
+package com.github.yingzhuo.spring.security.jwt.resolver;
 
 import com.github.yingzhuo.spring.security.jwt.JwtToken;
+import org.springframework.lang.NonNull;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.Optional;
 
 /**
  * @author 应卓
- * @since 1.0.0
+ * @since 1.1.0
  */
-public class DefaultJwtTokenParser implements JwtTokenParser {
+@FunctionalInterface
+public interface JwtTokenResolver {
 
-    private static final String AUTHORIZATION = "Authorization";
-    private static final String BEARER = "Bearer ";
-    private static final int BEARER_LEN = BEARER.length();
-
-    @Override
-    public Optional<JwtToken> parse(NativeWebRequest request) {
-
-        final String headerValue = request.getHeader(AUTHORIZATION);
-
-        if (headerValue == null ||
-                !headerValue.startsWith(BEARER) ||
-                headerValue.split("\\.").length != 3) {
-            return Optional.empty();
-        }
-
-        return Optional.of(JwtToken.of(headerValue.substring(BEARER_LEN)));
+    public static JwtTokenResolver getDefault() {
+        return new HttpHeaderJwtTokenResolver();
     }
+
+    @NonNull
+    public Optional<JwtToken> resolve(NativeWebRequest request);
 
 }
