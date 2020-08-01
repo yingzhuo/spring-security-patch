@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.yingzhuo.spring.security.jwt.factory.autoconfig.JwtFactoryAutoConfig
+    com.github.yingzhuo.spring.security.jwt.factory.autoconfig.JwtFactoryAutoConfig

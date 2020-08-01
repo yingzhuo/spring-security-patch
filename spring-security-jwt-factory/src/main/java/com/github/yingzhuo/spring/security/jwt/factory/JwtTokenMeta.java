@@ -42,6 +42,10 @@ public class JwtTokenMeta implements Serializable {
     private JwtTokenMeta() {
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,10 +65,6 @@ public class JwtTokenMeta implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(keyId, issuer, subject, audience, expiresAt, notBefore, issuedAt, jwtId, privateClaims);
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

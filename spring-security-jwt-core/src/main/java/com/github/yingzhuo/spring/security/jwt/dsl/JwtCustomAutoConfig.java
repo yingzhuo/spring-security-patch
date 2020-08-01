@@ -7,29 +7,25 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.jwt.factory.autoconfig;
+package com.github.yingzhuo.spring.security.jwt.dsl;
 
-import com.github.yingzhuo.spring.security.jwt.algorithm.AlgorithmFactories;
-import com.github.yingzhuo.spring.security.jwt.algorithm.AlgorithmFactory;
-import com.github.yingzhuo.spring.security.jwt.factory.DefaultJwtTokenFactory;
-import com.github.yingzhuo.spring.security.jwt.factory.JwtTokenFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.yingzhuo.spring.security.jwt.parser.DefaultJwtTokenParser;
+import com.github.yingzhuo.spring.security.jwt.parser.JwtTokenParser;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 
 /**
  * @author 应卓
  * @since 1.0.0
  */
-public class JwtFactoryAutoConfig {
-
-    @Autowired(required = false)
-    private AlgorithmFactory algorithmFactory = AlgorithmFactories.hmac384(AlgorithmFactories.class.getName());
+@ConditionalOnWebApplication
+public class JwtCustomAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public JwtTokenFactory jwtTokenFactory() {
-        return new DefaultJwtTokenFactory(algorithmFactory);
+    public JwtTokenParser jwtTokenParser() {
+        return new DefaultJwtTokenParser();
     }
 
 }
