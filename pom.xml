@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.yingzhuo</groupId>
     <artifactId>spring-security-patch</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <modules>
         <module>spring-security-crypto</module>
         <module>spring-security-jwt-algorithm</module>
