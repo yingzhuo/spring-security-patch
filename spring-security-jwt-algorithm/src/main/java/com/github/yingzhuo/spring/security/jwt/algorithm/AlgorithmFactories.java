@@ -9,10 +9,13 @@
  */
 package com.github.yingzhuo.spring.security.jwt.algorithm;
 
-import com.auth0.jwt.algorithms.Algorithm;
 import com.github.yingzhuo.spring.security.jwt.algorithm.ecdsa.ECDSA256AlgorithmFactory;
 import com.github.yingzhuo.spring.security.jwt.algorithm.ecdsa.ECDSA384AlgorithmFactory;
 import com.github.yingzhuo.spring.security.jwt.algorithm.ecdsa.ECDSA512AlgorithmFactory;
+import com.github.yingzhuo.spring.security.jwt.algorithm.hmac.HMAC256AlgorithmFactory;
+import com.github.yingzhuo.spring.security.jwt.algorithm.hmac.HMAC384AlgorithmFactory;
+import com.github.yingzhuo.spring.security.jwt.algorithm.hmac.HMAC512AlgorithmFactory;
+import com.github.yingzhuo.spring.security.jwt.algorithm.none.NoneAlgorithmFactory;
 import com.github.yingzhuo.spring.security.jwt.algorithm.rsa.RSA256AlgorithmFactory;
 import com.github.yingzhuo.spring.security.jwt.algorithm.rsa.RSA384AlgorithmFactory;
 import com.github.yingzhuo.spring.security.jwt.algorithm.rsa.RSA512AlgorithmFactory;
@@ -31,19 +34,19 @@ public final class AlgorithmFactories {
     }
 
     public static AlgorithmFactory none() {
-        return Algorithm::none;
+        return new NoneAlgorithmFactory();
     }
 
     public static AlgorithmFactory hmac256(String secret) {
-        return () -> Algorithm.HMAC256(secret);
+        return new HMAC256AlgorithmFactory(secret);
     }
 
     public static AlgorithmFactory hmac384(String secret) {
-        return () -> Algorithm.HMAC384(secret);
+        return new HMAC384AlgorithmFactory(secret);
     }
 
     public static AlgorithmFactory hmac512(String secret) {
-        return () -> Algorithm.HMAC512(secret);
+        return new HMAC512AlgorithmFactory(secret);
     }
 
     public static AlgorithmFactory rsa256(String publicKey, String privateKey) {

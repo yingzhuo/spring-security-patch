@@ -1,2 +1,4 @@
 org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer=\
     com.github.yingzhuo.spring.security.jwt.dsl.JwtCustomHttpSecurityDSL
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.github.yingzhuo.spring.security.jwt.autoconfig.JwtAuthenticationWebMvcConfigurer
