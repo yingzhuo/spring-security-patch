@@ -16,6 +16,6 @@ package com.github.yingzhuo.spring.security.jwt.factory;
 @FunctionalInterface
 public interface JwtTokenFactory {
 
-    public String create(JwtTokenMetadata meta);
+    public String create(JwtTokenMetadata metadata);
 
 }

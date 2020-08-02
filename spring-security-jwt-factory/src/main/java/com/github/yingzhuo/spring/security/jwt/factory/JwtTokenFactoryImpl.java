@@ -21,40 +21,40 @@ import java.util.Set;
 
 /**
  * @author 应卓
- * @since 1.0.0
+ * @since 1.1.0
  */
-public class DefaultJwtTokenFactory implements JwtTokenFactory {
+public class JwtTokenFactoryImpl implements JwtTokenFactory {
 
     private final Algorithm alg;
 
-    public DefaultJwtTokenFactory(AlgorithmFactory algorithmFactory) {
+    public JwtTokenFactoryImpl(AlgorithmFactory algorithmFactory) {
         this.alg = algorithmFactory.create();
     }
 
     @Override
-    public String create(JwtTokenMetadata meta) {
-        Objects.requireNonNull(meta);
+    public String create(JwtTokenMetadata metadata) {
+        Objects.requireNonNull(metadata);
 
         final JWTCreator.Builder builder = JWT.create();
 
         // Public Claims (Public)
-        Optional.ofNullable(meta.getKeyId()).ifPresent(builder::withKeyId);
+        Optional.ofNullable(metadata.getKeyId()).ifPresent(builder::withKeyId);
 
         // Public Claims (Payload)
-        Optional.ofNullable(meta.getIssuer()).ifPresent(builder::withIssuer);
-        Optional.ofNullable(meta.getSubject()).ifPresent(builder::withSubject);
-        Optional.ofNullable(meta.getExpiresAt()).ifPresent(builder::withExpiresAt);
-        Optional.ofNullable(meta.getNotBefore()).ifPresent(builder::withNotBefore);
-        Optional.ofNullable(meta.getIssuedAt()).ifPresent(builder::withIssuedAt);
-        Optional.ofNullable(meta.getJwtId()).ifPresent(builder::withJWTId);
-        Optional.ofNullable(meta.getAudience()).ifPresent(it -> {
+        Optional.ofNullable(metadata.getIssuer()).ifPresent(builder::withIssuer);
+        Optional.ofNullable(metadata.getSubject()).ifPresent(builder::withSubject);
+        Optional.ofNullable(metadata.getExpiresAt()).ifPresent(builder::withExpiresAt);
+        Optional.ofNullable(metadata.getNotBefore()).ifPresent(builder::withNotBefore);
+        Optional.ofNullable(metadata.getIssuedAt()).ifPresent(builder::withIssuedAt);
+        Optional.ofNullable(metadata.getJwtId()).ifPresent(builder::withJWTId);
+        Optional.ofNullable(metadata.getAudience()).ifPresent(it -> {
             if (!it.isEmpty()) {
-                builder.withAudience(meta.getAudience().toArray(new String[0]));
+                builder.withAudience(metadata.getAudience().toArray(new String[0]));
             }
         });
 
         // Private Claims
-        Optional.ofNullable(meta.getPrivateClaims()).ifPresent(map -> {
+        Optional.ofNullable(metadata.getPrivateClaims()).ifPresent(map -> {
             final Set<String> keySet = map.keySet();
             for (String name : keySet) {
                 Object value = map.get(name);

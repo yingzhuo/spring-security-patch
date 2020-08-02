@@ -11,8 +11,8 @@ package com.github.yingzhuo.spring.security.jwt.factory.autoconfig;
 
 import com.github.yingzhuo.spring.security.jwt.algorithm.AlgorithmFactories;
 import com.github.yingzhuo.spring.security.jwt.algorithm.AlgorithmFactory;
-import com.github.yingzhuo.spring.security.jwt.factory.DefaultJwtTokenFactory;
 import com.github.yingzhuo.spring.security.jwt.factory.JwtTokenFactory;
+import com.github.yingzhuo.spring.security.jwt.factory.JwtTokenFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +29,7 @@ public class JwtFactoryAutoConfig {
     @Bean
     @ConditionalOnMissingBean
     public JwtTokenFactory jwtTokenFactory() {
-        return new DefaultJwtTokenFactory(algorithmFactory);
+        return new JwtTokenFactoryImpl(algorithmFactory);
     }
 
 }

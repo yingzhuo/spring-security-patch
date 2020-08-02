@@ -9,7 +9,7 @@
  */
 package com.github.yingzhuo.spring.security.jwt.dsl;
 
-import com.github.yingzhuo.spring.security.jwt.AbstractJwtAuthenticationManager;
+import com.github.yingzhuo.spring.security.jwt.auth.AbstractJwtAuthenticationManager;
 import com.github.yingzhuo.spring.security.jwt.core.JwtAuthenticationFilter;
 import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtAuthenticationEntryPoint;
 import com.github.yingzhuo.spring.security.jwt.resolver.JwtTokenResolver;
@@ -34,7 +34,7 @@ public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHt
         val ac = http.getSharedObject(ApplicationContext.class);
 
         // Token解析器
-        val parser = getBean(ac, JwtTokenResolver.class, JwtTokenResolver.getDefault());
+        val resolver = getBean(ac, JwtTokenResolver.class, JwtTokenResolver.getDefault());
 
         // 错误处理器
         val authenticationEntryPoint = getBean(ac, AuthenticationEntryPoint.class, new JwtAuthenticationEntryPoint());
@@ -46,7 +46,7 @@ public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHt
         }
 
         // Jwt处理Filter
-        val filter = new JwtAuthenticationFilter(parser, manager, authenticationEntryPoint);
+        val filter = new JwtAuthenticationFilter(resolver, manager, authenticationEntryPoint);
         filter.afterPropertiesSet();
 
         // 设置Jwt认证过滤器

@@ -9,9 +9,10 @@
  */
 package com.github.yingzhuo.spring.security.jwt.core;
 
-import com.github.yingzhuo.spring.security.jwt.AbstractJwtAuthenticationManager;
+import com.github.yingzhuo.spring.security.jwt.auth.AbstractJwtAuthenticationManager;
 import com.github.yingzhuo.spring.security.jwt.JwtToken;
 import com.github.yingzhuo.spring.security.jwt.resolver.JwtTokenResolver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,7 @@ import java.util.Optional;
  * @author 应卓
  * @since 1.0.0
  */
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private JwtTokenResolver tokenParser;
@@ -55,12 +57,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            log.debug("{} skipped. reason: [{}]", JwtAuthenticationFilter.class.getName(), "already authenticated");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (doAuth(request, response)) {
+            filterChain.doFilter(request, response);
+        }
+    }
+
+    private boolean doAuth(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Optional<JwtToken> tokenOption = tokenParser.resolve(new ServletWebRequest(request, response));
 
         try {
             if (tokenOption.isPresent()) {
                 UsernamePasswordAuthenticationToken upt =
-                        (UsernamePasswordAuthenticationToken) authManager.authenticate(tokenOption.orElse(null));
+                        (UsernamePasswordAuthenticationToken) authManager.authenticate(tokenOption.get());
 
                 upt.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -71,10 +85,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.clearContext();
             authenticationEntryPoint.commence(request, response, failed);
-            return;
+            return false;
+        } catch (Exception e) {
+            log.warn(e.getMessage(), e);
+            throw e;
         }
 
-        filterChain.doFilter(request, response);
+        return true;
     }
 
     public void setTokenParser(JwtTokenResolver tokenParser) {

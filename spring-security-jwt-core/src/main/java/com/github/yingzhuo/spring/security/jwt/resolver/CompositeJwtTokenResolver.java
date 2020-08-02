@@ -25,11 +25,11 @@ public class CompositeJwtTokenResolver implements JwtTokenResolver {
 
     private final List<JwtTokenResolver> resolvers = new ArrayList<>();
 
-    public static CompositeJwtTokenResolver getInstance() {
-        return new CompositeJwtTokenResolver();
+    private CompositeJwtTokenResolver() {
     }
 
-    private CompositeJwtTokenResolver() {
+    public static CompositeJwtTokenResolver getInstance() {
+        return new CompositeJwtTokenResolver();
     }
 
     @Override

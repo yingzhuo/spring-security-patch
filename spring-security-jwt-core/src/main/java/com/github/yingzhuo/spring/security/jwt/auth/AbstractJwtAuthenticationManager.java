@@ -7,12 +7,13 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.jwt;
+package com.github.yingzhuo.spring.security.jwt.auth;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.github.yingzhuo.spring.security.jwt.JwtToken;
 import com.github.yingzhuo.spring.security.jwt.algorithm.AlgorithmFactories;
 import com.github.yingzhuo.spring.security.jwt.algorithm.AlgorithmFactory;
 import com.github.yingzhuo.spring.security.jwt.exception.*;
@@ -102,7 +103,9 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
     protected abstract UserDetails doAuthenticate(String rawToken, DecodedJWT jwt) throws AuthenticationException;
 
     @Override
-    public abstract void afterPropertiesSet() throws Exception;
+    public void afterPropertiesSet() {
+        // nop
+    }
 
     public void setAlgorithmFactory(AlgorithmFactory algorithmFactory) {
         this.algorithmFactory = algorithmFactory;
