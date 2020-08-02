@@ -5,10 +5,16 @@
 [![Build](http://img.shields.io/badge/Build-Maven_2-green.svg)](https://maven.apache.org/)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.yingzhuo/spring-security-patch.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.yingzhuo%22%20AND%20a:%22spring-security-patch%22)
 
-## Wiki 
+## Requires
 
-* [spring-security-jwt-core](https://github.com/yingzhuo/spring-security-patch/wiki/spring-security-jwt-core)
-* [spring-security-jwt-factory](https://github.com/yingzhuo/spring-security-patch/wiki/spring-security-jwt-factory)
+* Java8+
+* SpringBoot-2.3.0+
+* SpringSecurity-5.3.0+
+
+## Wiki
+
+* [spring-security-jwt-core](./.wiki/spring-security-jwt-core.md)
+* [spring-security-jwt-factory](./.wiki/spring-security-jwt-factory.md)
 
 ### Author
 
