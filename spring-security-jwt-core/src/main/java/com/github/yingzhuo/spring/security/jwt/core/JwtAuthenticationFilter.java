@@ -9,10 +9,14 @@
  */
 package com.github.yingzhuo.spring.security.jwt.core;
 
+import com.github.yingzhuo.spring.security.common.DebugMode;
+import com.github.yingzhuo.spring.security.common.Debugger;
 import com.github.yingzhuo.spring.security.jwt.JwtToken;
 import com.github.yingzhuo.spring.security.jwt.auth.AbstractJwtAuthenticationManager;
 import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtAuthenticationEntryPoint;
 import com.github.yingzhuo.spring.security.jwt.resolver.JwtTokenResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,47 +38,61 @@ import java.util.Optional;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenResolver tokenParser;
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
+    private final JwtTokenResolver tokenResolver;
     private final AbstractJwtAuthenticationManager authManager;
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private DebugMode debugMode = DebugMode.DISABLED;
+    private Debugger debugger;
 
-    public JwtAuthenticationFilter(JwtTokenResolver tokenParser, AbstractJwtAuthenticationManager authManager) {
-        this.tokenParser = tokenParser;
+    public JwtAuthenticationFilter(JwtTokenResolver tokenResolver, AbstractJwtAuthenticationManager authManager) {
+        this.tokenResolver = tokenResolver;
         this.authManager = authManager;
     }
 
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
-        Assert.notNull(tokenParser, () -> null);
+        Assert.notNull(tokenResolver, () -> null);
         Assert.notNull(authManager, () -> null);
+        this.debugger = Debugger.of(LOGGER, debugMode);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        final String path = request.getRequestURI();
+        final String method = request.getMethod().toUpperCase();
+
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            debugger.debug("[{}][{}] 已经通过认证", path, method);
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
+            debugger.debug("[{}][{}] 认证", path, method);
             doAuth(request, response);
+            debugger.debug("[{}][{}] 认证结束", path, method);
         } catch (AuthenticationException authException) {
             if (jwtAuthenticationEntryPoint == null) {
+                debugger.debug("[{}][{}] 抛出认证异常: {}", path, method, authException.getClass().getName());
                 throw authException;
             } else {
+                debugger.debug("[{}][{}] 处理认证异常: {}", path, method, authException.getClass().getName());
                 jwtAuthenticationEntryPoint.commence(request, response, authException);
                 return;
             }
         } catch (Exception e) {
+            debugger.debug("[{}][{}] 抛出其他异常: {}", path, method, e.getClass().getName());
             throw e;
         }
         filterChain.doFilter(request, response);
     }
 
     private void doAuth(HttpServletRequest request, HttpServletResponse response) {
-        Optional<JwtToken> tokenOption = tokenParser.resolve(new ServletWebRequest(request, response));
+        Optional<JwtToken> tokenOption = tokenResolver.resolve(new ServletWebRequest(request, response));
 
         // 所有异常全部抛出
         if (tokenOption.isPresent()) {
@@ -87,8 +105,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
+    private boolean isDebugMode() {
+        return this.debugMode == DebugMode.ENABLED;
+    }
+
     public void setJwtAuthenticationEntryPoint(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+    }
+
+    public void setDebugMode(DebugMode debugMode) {
+        this.debugMode = debugMode;
     }
 
 }

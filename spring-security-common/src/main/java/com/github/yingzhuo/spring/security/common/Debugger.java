@@ -7,35 +7,32 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.jwt.properties;
+package com.github.yingzhuo.spring.security.common;
 
-import com.github.yingzhuo.spring.security.common.DebugMode;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.slf4j.Logger;
 
 /**
  * @author 应卓
  * @since 1.1.3
  */
-@ConfigurationProperties(prefix = "spring-security-patch.jwt")
-public class SpringSecurityPatchJwtProperties {
+public final class Debugger {
 
-    private boolean enabled = true;
-    private DebugMode debugMode = DebugMode.DISABLED;
-
-    public boolean isEnabled() {
-        return enabled;
+    public static Debugger of(Logger logger, DebugMode debugMode) {
+        return new Debugger(logger, debugMode);
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+    private final Logger logger;
+    private final DebugMode debugMode;
 
-    public DebugMode getDebugMode() {
-        return debugMode;
-    }
-
-    public void setDebugMode(DebugMode debugMode) {
+    private Debugger(Logger logger, DebugMode debugMode) {
+        this.logger = logger;
         this.debugMode = debugMode;
+    }
+
+    public void debug(String format, Object... args) {
+        if (debugMode == DebugMode.ENABLED && logger.isDebugEnabled()) {
+            logger.debug(format, args);
+        }
     }
 
 }

@@ -7,35 +7,16 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.jwt.properties;
-
-import com.github.yingzhuo.spring.security.common.DebugMode;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+package com.github.yingzhuo.spring.security.common;
 
 /**
  * @author 应卓
  * @since 1.1.3
  */
-@ConfigurationProperties(prefix = "spring-security-patch.jwt")
-public class SpringSecurityPatchJwtProperties {
+public enum DebugMode {
 
-    private boolean enabled = true;
-    private DebugMode debugMode = DebugMode.DISABLED;
+    ENABLED,
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public DebugMode getDebugMode() {
-        return debugMode;
-    }
-
-    public void setDebugMode(DebugMode debugMode) {
-        this.debugMode = debugMode;
-    }
+    DISABLED;
 
 }

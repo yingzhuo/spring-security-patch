@@ -49,6 +49,7 @@ public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHt
         // Jwt处理Filter
         final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(resolver, manager);
         filter.setJwtAuthenticationEntryPoint(getBean(ac, JwtAuthenticationEntryPoint.class, null));
+        filter.setDebugMode(properties.getDebugMode());
         filter.afterPropertiesSet();
 
         // 设置Jwt认证过滤器

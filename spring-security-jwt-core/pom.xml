@@ -15,6 +15,10 @@
         <!-- spring-security-patch -->
         <dependency>
             <groupId>com.github.yingzhuo</groupId>
+            <artifactId>spring-security-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.yingzhuo</groupId>
             <artifactId>spring-security-jwt-algorithm</artifactId>
         </dependency>
 
