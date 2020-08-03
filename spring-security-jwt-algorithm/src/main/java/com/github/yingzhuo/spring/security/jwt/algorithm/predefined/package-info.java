@@ -1,0 +1,1 @@
+package com.github.yingzhuo.spring.security.jwt.algorithm.predefined;
