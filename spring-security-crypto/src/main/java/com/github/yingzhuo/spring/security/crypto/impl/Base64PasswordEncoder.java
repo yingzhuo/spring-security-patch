@@ -41,4 +41,9 @@ public class Base64PasswordEncoder implements PasswordEncoder {
         return new String(Base64.getUrlDecoder().decode(encodedPassword.getBytes(charset))).equals(rawPassword.toString());
     }
 
+    @Override
+    public boolean upgradeEncoding(String encodedPassword) {
+        return true;
+    }
+
 }
