@@ -12,6 +12,7 @@ package com.github.yingzhuo.spring.security.jwt.dsl;
 import com.github.yingzhuo.spring.security.jwt.auth.AbstractJwtAuthenticationManager;
 import com.github.yingzhuo.spring.security.jwt.core.JwtAuthenticationFilter;
 import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtAuthenticationEntryPoint;
+import com.github.yingzhuo.spring.security.jwt.properties.SpringSecurityPatchJwtProperties;
 import com.github.yingzhuo.spring.security.jwt.resolver.JwtTokenResolver;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
@@ -30,6 +31,11 @@ public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHt
     public void configure(HttpSecurity http) throws Exception {
 
         final ApplicationContext ac = http.getSharedObject(ApplicationContext.class);
+
+        final SpringSecurityPatchJwtProperties properties = getBean(ac, SpringSecurityPatchJwtProperties.class, null);
+        if (properties == null || !properties.isEnabled()) {
+            return;
+        }
 
         // Token解析器
         final JwtTokenResolver resolver = getBean(ac, JwtTokenResolver.class, JwtTokenResolver.getDefault());

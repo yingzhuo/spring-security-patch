@@ -10,8 +10,11 @@
 package com.github.yingzhuo.spring.security.jwt.autoconfig;
 
 import com.github.yingzhuo.spring.security.jwt.RawToken;
+import com.github.yingzhuo.spring.security.jwt.properties.SpringSecurityPatchJwtProperties;
 import com.github.yingzhuo.spring.security.jwt.util.JwtSecurityContext;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -25,7 +28,9 @@ import java.util.List;
  * @author 应卓
  * @since 1.1.1
  */
+@EnableConfigurationProperties(SpringSecurityPatchJwtProperties.class)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@ConditionalOnProperty(prefix = "spring-security-patch.jwt", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class JwtAuthenticationWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
