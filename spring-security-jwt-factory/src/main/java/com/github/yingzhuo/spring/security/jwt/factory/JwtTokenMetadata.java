@@ -9,9 +9,6 @@
  */
 package com.github.yingzhuo.spring.security.jwt.factory;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.*;
@@ -22,8 +19,6 @@ import java.util.function.Supplier;
  * @author 应卓
  * @since 1.0.0
  */
-@Getter
-@Setter
 public final class JwtTokenMetadata implements Serializable {
 
     // Public Claims (Header)
@@ -44,6 +39,78 @@ public final class JwtTokenMetadata implements Serializable {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public String getKeyId() {
+        return keyId;
+    }
+
+    public void setKeyId(String keyId) {
+        this.keyId = keyId;
+    }
+
+    public String getIssuer() {
+        return issuer;
+    }
+
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public List<String> getAudience() {
+        return audience;
+    }
+
+    public void setAudience(List<String> audience) {
+        this.audience = audience;
+    }
+
+    public Date getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(Date expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
+    public Date getNotBefore() {
+        return notBefore;
+    }
+
+    public void setNotBefore(Date notBefore) {
+        this.notBefore = notBefore;
+    }
+
+    public Date getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(Date issuedAt) {
+        this.issuedAt = issuedAt;
+    }
+
+    public String getJwtId() {
+        return jwtId;
+    }
+
+    public void setJwtId(String jwtId) {
+        this.jwtId = jwtId;
+    }
+
+    public Map<String, Object> getPrivateClaims() {
+        return privateClaims;
+    }
+
+    public void setPrivateClaims(Map<String, Object> privateClaims) {
+        this.privateClaims = privateClaims;
     }
 
     @Override

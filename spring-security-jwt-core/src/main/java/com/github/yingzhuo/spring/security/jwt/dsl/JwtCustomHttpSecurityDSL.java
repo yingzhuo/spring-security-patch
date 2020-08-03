@@ -13,13 +13,11 @@ import com.github.yingzhuo.spring.security.jwt.auth.AbstractJwtAuthenticationMan
 import com.github.yingzhuo.spring.security.jwt.core.JwtAuthenticationFilter;
 import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtAuthenticationEntryPoint;
 import com.github.yingzhuo.spring.security.jwt.resolver.JwtTokenResolver;
-import lombok.val;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
@@ -31,22 +29,20 @@ public class JwtCustomHttpSecurityDSL extends AbstractHttpConfigurer<JwtCustomHt
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-        val ac = http.getSharedObject(ApplicationContext.class);
+        final ApplicationContext ac = http.getSharedObject(ApplicationContext.class);
 
         // Token解析器
-        val resolver = getBean(ac, JwtTokenResolver.class, JwtTokenResolver.getDefault());
-
-        // 错误处理器
-        val authenticationEntryPoint = getBean(ac, AuthenticationEntryPoint.class, new JwtAuthenticationEntryPoint());
+        final JwtTokenResolver resolver = getBean(ac, JwtTokenResolver.class, JwtTokenResolver.getDefault());
 
         // Jwt认证管理器
-        val manager = getBean(ac, AbstractJwtAuthenticationManager.class, null);
+        final AbstractJwtAuthenticationManager manager = getBean(ac, AbstractJwtAuthenticationManager.class, null);
         if (manager == null) {
             throw new NoSuchBeanDefinitionException(AbstractJwtAuthenticationManager.class);
         }
 
         // Jwt处理Filter
-        val filter = new JwtAuthenticationFilter(resolver, manager, authenticationEntryPoint);
+        final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(resolver, manager);
+        filter.setJwtAuthenticationEntryPoint(getBean(ac, JwtAuthenticationEntryPoint.class, null));
         filter.afterPropertiesSet();
 
         // 设置Jwt认证过滤器

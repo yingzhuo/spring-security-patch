@@ -311,14 +311,6 @@
                 <version>1.2.3</version>
             </dependency>
 
-            <!-- lombok -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.18.12</version>
-                <scope>provided</scope>
-            </dependency>
-
             <!-- jwt -->
             <dependency>
                 <groupId>com.auth0</groupId>

@@ -11,12 +11,11 @@ package com.github.yingzhuo.spring.security.jwt.core;
 
 import com.github.yingzhuo.spring.security.jwt.JwtToken;
 import com.github.yingzhuo.spring.security.jwt.auth.AbstractJwtAuthenticationManager;
+import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtAuthenticationEntryPoint;
 import com.github.yingzhuo.spring.security.jwt.resolver.JwtTokenResolver;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -33,17 +32,15 @@ import java.util.Optional;
  * @author 应卓
  * @since 1.0.0
  */
-@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private JwtTokenResolver tokenParser;
-    private AbstractJwtAuthenticationManager authManager;
-    private AuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtTokenResolver tokenParser;
+    private final AbstractJwtAuthenticationManager authManager;
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public JwtAuthenticationFilter(JwtTokenResolver tokenParser, AbstractJwtAuthenticationManager authManager, AuthenticationEntryPoint authenticationEntryPoint) {
+    public JwtAuthenticationFilter(JwtTokenResolver tokenParser, AbstractJwtAuthenticationManager authManager) {
         this.tokenParser = tokenParser;
         this.authManager = authManager;
-        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Override
@@ -51,59 +48,47 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         super.afterPropertiesSet();
         Assert.notNull(tokenParser, () -> null);
         Assert.notNull(authManager, () -> null);
-        Assert.notNull(authenticationEntryPoint, () -> null);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            log.debug("{} skipped. reason: [{}]", JwtAuthenticationFilter.class.getName(), "already authenticated");
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (doAuth(request, response)) {
-            filterChain.doFilter(request, response);
-        }
-    }
-
-    private boolean doAuth(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Optional<JwtToken> tokenOption = tokenParser.resolve(new ServletWebRequest(request, response));
-
         try {
-            if (tokenOption.isPresent()) {
-                UsernamePasswordAuthenticationToken upt =
-                        (UsernamePasswordAuthenticationToken) authManager.authenticate(tokenOption.get());
-
-                upt.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(upt);
+            doAuth(request, response);
+        } catch (AuthenticationException authException) {
+            if (jwtAuthenticationEntryPoint == null) {
+                throw authException;
+            } else {
+                jwtAuthenticationEntryPoint.commence(request, response, authException);
+                return;
             }
-
-        } catch (AuthenticationException failed) {
-
-            SecurityContextHolder.clearContext();
-            authenticationEntryPoint.commence(request, response, failed);
-            return false;
         } catch (Exception e) {
-            log.warn(e.getMessage(), e);
             throw e;
         }
-
-        return true;
+        filterChain.doFilter(request, response);
     }
 
-    public void setTokenParser(JwtTokenResolver tokenParser) {
-        this.tokenParser = tokenParser;
+    private void doAuth(HttpServletRequest request, HttpServletResponse response) {
+        Optional<JwtToken> tokenOption = tokenParser.resolve(new ServletWebRequest(request, response));
+
+        // 所有异常全部抛出
+        if (tokenOption.isPresent()) {
+            UsernamePasswordAuthenticationToken upt =
+                    (UsernamePasswordAuthenticationToken) authManager.authenticate(tokenOption.get());
+
+            upt.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            SecurityContextHolder.getContext().setAuthentication(upt);
+        }
     }
 
-    public void setAuthManager(AbstractJwtAuthenticationManager authManager) {
-        this.authManager = authManager;
-    }
-
-    public void setAuthenticationEntryPoint(AuthenticationEntryPoint authenticationEntryPoint) {
-        this.authenticationEntryPoint = authenticationEntryPoint;
+    public void setJwtAuthenticationEntryPoint(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
 }

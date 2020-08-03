@@ -32,15 +32,19 @@ public class HttpParamJwtTokenResolver implements JwtTokenResolver {
 
     @Override
     public Optional<JwtToken> resolve(NativeWebRequest request) {
-        final String paramValue = request.getParameter(paramName);
+        String paramValue = request.getParameter(paramName);
 
-        if (paramValue == null ||
-                !paramValue.startsWith(prefix) ||
-                paramValue.split("\\.").length != 3) {
+        if (paramValue == null || !paramValue.startsWith(prefix)) {
             return Optional.empty();
         }
 
-        return Optional.of(JwtToken.of(paramValue.substring(prefixLen)));
+        paramValue = paramValue.substring(prefixLen);
+
+        if (paramValue.split("\\.").length == 2 && !paramValue.endsWith(".")) {
+            paramValue += ".";
+        }
+
+        return Optional.of(JwtToken.of(paramValue));
     }
 
 }

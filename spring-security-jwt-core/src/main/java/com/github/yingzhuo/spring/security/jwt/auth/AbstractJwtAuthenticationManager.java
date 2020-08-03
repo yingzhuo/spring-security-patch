@@ -17,9 +17,7 @@ import com.github.yingzhuo.spring.security.jwt.JwtToken;
 import com.github.yingzhuo.spring.security.jwt.algorithm.AlgorithmFactories;
 import com.github.yingzhuo.spring.security.jwt.algorithm.AlgorithmFactory;
 import com.github.yingzhuo.spring.security.jwt.exception.*;
-import lombok.val;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,14 +33,14 @@ import java.util.HashSet;
  */
 public abstract class AbstractJwtAuthenticationManager implements AuthenticationManager, InitializingBean {
 
-    private AlgorithmFactory algorithmFactory;
+    private final Algorithm algorithm;
 
     public AbstractJwtAuthenticationManager() {
-        this.algorithmFactory = AlgorithmFactories.getDefault();
+        this(AlgorithmFactories.getDefault());
     }
 
     public AbstractJwtAuthenticationManager(AlgorithmFactory algorithmFactory) {
-        this.algorithmFactory = algorithmFactory;
+        this.algorithm = algorithmFactory.create();
     }
 
     @Override
@@ -53,13 +51,12 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
         }
 
         try {
-            Algorithm algorithm = algorithmFactory.create();
             final JWTVerifier verifier = JWT.require(algorithm).build();
 
-            val rawToken = token.toString();
+            String rawToken = ((JwtToken) token).getRawToken();
             DecodedJWT jwt = verifier.verify(rawToken);
 
-            val userDetails = doAuthenticate(rawToken, jwt);
+            final UserDetails userDetails = doAuthenticate(rawToken, jwt);
 
             if (userDetails == null) {
                 throw new UserDetailsNotFoundException();
@@ -77,7 +74,7 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
                 throw new CredentialExpiredException();
             }
 
-            val upt = new UsernamePasswordAuthenticationToken(
+            UsernamePasswordAuthenticationToken upt = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     rawToken,
                     userDetails.getAuthorities() != null ? userDetails.getAuthorities() : new HashSet<>());
@@ -99,16 +96,11 @@ public abstract class AbstractJwtAuthenticationManager implements Authentication
         }
     }
 
-    @Nullable
     protected abstract UserDetails doAuthenticate(String rawToken, DecodedJWT jwt) throws AuthenticationException;
 
     @Override
     public void afterPropertiesSet() {
         // nop
-    }
-
-    public void setAlgorithmFactory(AlgorithmFactory algorithmFactory) {
-        this.algorithmFactory = algorithmFactory;
     }
 
 }

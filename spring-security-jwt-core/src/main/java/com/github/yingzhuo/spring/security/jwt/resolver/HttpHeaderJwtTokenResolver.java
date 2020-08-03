@@ -38,15 +38,19 @@ public class HttpHeaderJwtTokenResolver implements JwtTokenResolver {
     @Override
     public Optional<JwtToken> resolve(NativeWebRequest request) {
 
-        final String headerValue = request.getHeader(headerName);
+        String headerValue = request.getHeader(headerName);
 
-        if (headerValue == null ||
-                !headerValue.startsWith(prefix) ||
-                headerValue.split("\\.").length != 3) {
+        if (headerValue == null || !headerValue.startsWith(prefix)) {
             return Optional.empty();
         }
 
-        return Optional.of(JwtToken.of(headerValue.substring(prefixLen)));
+        headerValue = headerValue.substring(prefixLen);
+
+        if (headerValue.split("\\.").length == 2 && !headerValue.endsWith(".")) {
+            headerValue += ".";
+        }
+
+        return Optional.of(JwtToken.of(headerValue));
     }
 
 }
