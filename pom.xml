@@ -13,6 +13,7 @@
         <module>spring-security-jwt-algorithm</module>
         <module>spring-security-jwt-core</module>
         <module>spring-security-jwt-factory</module>
+        <module>spring-security-param</module>
     </modules>
     <packaging>pom</packaging>
 

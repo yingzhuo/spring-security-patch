@@ -7,31 +7,18 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.common;
+package com.github.yingzhuo.spring.security.param.autoconfig;
 
-import org.slf4j.Logger;
+import com.github.yingzhuo.spring.security.param.properties.SpringSecurityPatchParamsProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author 应卓
  * @since 1.1.3
  */
-public final class Debugger {
-
-    private final Logger logger;
-    private final DebugMode debugMode;
-    private Debugger(Logger logger, DebugMode debugMode) {
-        this.logger = logger;
-        this.debugMode = debugMode;
-    }
-
-    public static Debugger of(Logger logger, DebugMode debugMode) {
-        return new Debugger(logger, debugMode);
-    }
-
-    public void debug(String format, Object... args) {
-        if (debugMode == DebugMode.ENABLED && logger.isDebugEnabled()) {
-            logger.debug(format, args);
-        }
-    }
-
+@EnableConfigurationProperties(SpringSecurityPatchParamsProperties.class)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+public class ParamsValidationWebMvcConfigurer implements WebMvcConfigurer {
 }

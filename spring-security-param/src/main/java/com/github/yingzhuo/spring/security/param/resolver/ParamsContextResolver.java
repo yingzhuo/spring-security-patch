@@ -7,31 +7,19 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.common;
+package com.github.yingzhuo.spring.security.param.resolver;
 
-import org.slf4j.Logger;
+import com.github.yingzhuo.spring.security.param.ParamsContext;
+import org.springframework.web.context.request.NativeWebRequest;
 
 /**
  * @author 应卓
  * @since 1.1.3
  */
-public final class Debugger {
+public interface ParamsContextResolver {
 
-    private final Logger logger;
-    private final DebugMode debugMode;
-    private Debugger(Logger logger, DebugMode debugMode) {
-        this.logger = logger;
-        this.debugMode = debugMode;
-    }
+    public String getSignParamName();
 
-    public static Debugger of(Logger logger, DebugMode debugMode) {
-        return new Debugger(logger, debugMode);
-    }
-
-    public void debug(String format, Object... args) {
-        if (debugMode == DebugMode.ENABLED && logger.isDebugEnabled()) {
-            logger.debug(format, args);
-        }
-    }
+    public ParamsContext resolve(NativeWebRequest request);
 
 }

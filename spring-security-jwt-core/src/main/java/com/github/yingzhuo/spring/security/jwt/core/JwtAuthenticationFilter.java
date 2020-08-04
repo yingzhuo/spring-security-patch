@@ -15,7 +15,6 @@ import com.github.yingzhuo.spring.security.jwt.JwtToken;
 import com.github.yingzhuo.spring.security.jwt.auth.AbstractJwtAuthenticationManager;
 import com.github.yingzhuo.spring.security.jwt.errorhandler.JwtAuthenticationEntryPoint;
 import com.github.yingzhuo.spring.security.jwt.resolver.JwtTokenResolver;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -38,8 +37,6 @@ import java.util.Optional;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-
     private final JwtTokenResolver tokenResolver;
     private final AbstractJwtAuthenticationManager authManager;
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -56,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         super.afterPropertiesSet();
         Assert.notNull(tokenResolver, () -> null);
         Assert.notNull(authManager, () -> null);
-        this.debugger = Debugger.of(LOGGER, debugMode);
+        this.debugger = Debugger.of(LoggerFactory.getLogger(JwtAuthenticationFilter.class), debugMode);
     }
 
     @Override
@@ -72,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            debugger.debug("[{}][{}] 认证", path, method);
+            debugger.debug("[{}][{}] 认证开始", path, method);
             doAuth(request, response);
             debugger.debug("[{}][{}] 认证结束", path, method);
         } catch (AuthenticationException authException) {
@@ -88,6 +85,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             debugger.debug("[{}][{}] 抛出其他异常: {}", path, method, e.getClass().getName());
             throw e;
         }
+
         filterChain.doFilter(request, response);
     }
 
@@ -109,12 +107,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return this.debugMode == DebugMode.ENABLED;
     }
 
-    public void setJwtAuthenticationEntryPoint(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-    }
-
     public void setDebugMode(DebugMode debugMode) {
         this.debugMode = debugMode;
+    }
+
+    public void setJwtAuthenticationEntryPoint(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
 }

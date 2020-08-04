@@ -7,31 +7,20 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.common;
+package com.github.yingzhuo.spring.security.param.validation;
 
-import org.slf4j.Logger;
+import java.util.Map;
 
 /**
  * @author 应卓
  * @since 1.1.3
  */
-public final class Debugger {
+public interface ParamsValidationAlgorithm {
 
-    private final Logger logger;
-    private final DebugMode debugMode;
-    private Debugger(Logger logger, DebugMode debugMode) {
-        this.logger = logger;
-        this.debugMode = debugMode;
-    }
+    public String merge(Map<String, String[]> params, String signParameterName);
 
-    public static Debugger of(Logger logger, DebugMode debugMode) {
-        return new Debugger(logger, debugMode);
-    }
+    public String encode(String mergedParams);
 
-    public void debug(String format, Object... args) {
-        if (debugMode == DebugMode.ENABLED && logger.isDebugEnabled()) {
-            logger.debug(format, args);
-        }
-    }
+    public boolean matches(String hashedParameters, String sign);
 
 }

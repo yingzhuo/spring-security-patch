@@ -7,31 +7,20 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.common;
+package com.github.yingzhuo.spring.security.param;
 
-import org.slf4j.Logger;
+import java.io.Serializable;
 
 /**
  * @author 应卓
  * @since 1.1.3
  */
-public final class Debugger {
+public interface ParamsContext extends Serializable {
 
-    private final Logger logger;
-    private final DebugMode debugMode;
-    private Debugger(Logger logger, DebugMode debugMode) {
-        this.logger = logger;
-        this.debugMode = debugMode;
-    }
+    public String getNonce();
 
-    public static Debugger of(Logger logger, DebugMode debugMode) {
-        return new Debugger(logger, debugMode);
-    }
+    public Long getTimestamp();
 
-    public void debug(String format, Object... args) {
-        if (debugMode == DebugMode.ENABLED && logger.isDebugEnabled()) {
-            logger.debug(format, args);
-        }
-    }
+    public String getSign();
 
 }
