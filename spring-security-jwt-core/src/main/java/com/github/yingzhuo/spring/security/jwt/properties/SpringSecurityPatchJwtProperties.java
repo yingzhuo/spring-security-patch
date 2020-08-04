@@ -11,6 +11,10 @@ package com.github.yingzhuo.spring.security.jwt.properties;
 
 import com.github.yingzhuo.spring.security.common.DebugMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author 应卓
@@ -21,6 +25,7 @@ public class SpringSecurityPatchJwtProperties {
 
     private boolean enabled = true;
     private DebugMode debugMode = DebugMode.DISABLED;
+    private Set<AntPathRequestMatcher> excludes = new HashSet<>();
 
     public boolean isEnabled() {
         return enabled;
@@ -36,6 +41,14 @@ public class SpringSecurityPatchJwtProperties {
 
     public void setDebugMode(DebugMode debugMode) {
         this.debugMode = debugMode;
+    }
+
+    public Set<AntPathRequestMatcher> getExcludes() {
+        return excludes;
+    }
+
+    public void setExcludes(Set<AntPathRequestMatcher> excludes) {
+        this.excludes = excludes;
     }
 
 }

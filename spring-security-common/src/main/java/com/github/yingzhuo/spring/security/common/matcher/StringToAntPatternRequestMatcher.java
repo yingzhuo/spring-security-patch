@@ -7,18 +7,29 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.param;
+package com.github.yingzhuo.spring.security.common.matcher;
+
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * @author 应卓
  * @since 1.1.3
  */
-public interface MutableParamsContext extends ParamsContext {
+public class StringToAntPatternRequestMatcher implements Converter<String, AntPathRequestMatcher> {
 
-    public void setNonce(String nonce);
+    @Override
+    public AntPathRequestMatcher convert(String value) {
 
-    public void setTimestamp(Long timestamp);
+        String[] parts = value.split(",", 2);
 
-    public void setSign(String sign);
+        if (parts.length == 2) {
+            String method = parts[0].toUpperCase().trim();
+            String pattern = parts[1].trim();
+            return new AntPathRequestMatcher(pattern, method);
+        } else {
+            return new AntPathRequestMatcher(parts[0]);
+        }
+    }
 
 }

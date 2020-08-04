@@ -19,6 +19,7 @@ public final class Debugger {
 
     private final Logger logger;
     private final DebugMode debugMode;
+
     private Debugger(Logger logger, DebugMode debugMode) {
         this.logger = logger;
         this.debugMode = debugMode;

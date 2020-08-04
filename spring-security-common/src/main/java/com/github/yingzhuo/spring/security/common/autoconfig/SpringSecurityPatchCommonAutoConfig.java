@@ -7,20 +7,22 @@
  *
  *  https://github.com/yingzhuo/spring-security-patch
  */
-package com.github.yingzhuo.spring.security.param;
+package com.github.yingzhuo.spring.security.common.autoconfig;
 
-import java.io.Serializable;
+import com.github.yingzhuo.spring.security.common.matcher.StringToAntPatternRequestMatcher;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import org.springframework.context.annotation.Bean;
 
 /**
  * @author 应卓
  * @since 1.1.3
  */
-public interface ParamsContext extends Serializable {
+public class SpringSecurityPatchCommonAutoConfig {
 
-    public String getNonce();
-
-    public Long getTimestamp();
-
-    public String getSign();
+    @Bean
+    @ConfigurationPropertiesBinding
+    public StringToAntPatternRequestMatcher stringToAntPatternRequestMatcher() {
+        return new StringToAntPatternRequestMatcher();
+    }
 
 }

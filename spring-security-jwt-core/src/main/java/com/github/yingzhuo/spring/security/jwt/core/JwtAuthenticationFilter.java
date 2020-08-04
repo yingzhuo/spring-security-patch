@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author 应卓
@@ -40,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenResolver tokenResolver;
     private final AbstractJwtAuthenticationManager authManager;
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private Set<AntPathRequestMatcher> excludes;
     private DebugMode debugMode = DebugMode.DISABLED;
     private Debugger debugger;
 
@@ -61,6 +64,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String path = request.getRequestURI();
         final String method = request.getMethod().toUpperCase();
+
+        if (excludes != null) {
+            for (AntPathRequestMatcher matcher : excludes) {
+                if (matcher.matches(request)) {
+                    debugger.debug("[{}][{}] 已跳过", path, method);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+            }
+        }
 
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             debugger.debug("[{}][{}] 已经通过认证", path, method);
@@ -103,16 +116,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private boolean isDebugMode() {
-        return this.debugMode == DebugMode.ENABLED;
-    }
-
     public void setDebugMode(DebugMode debugMode) {
         this.debugMode = debugMode;
     }
 
     public void setJwtAuthenticationEntryPoint(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+    }
+
+    public void setExcludes(Set<AntPathRequestMatcher> excludes) {
+        this.excludes = excludes;
     }
 
 }
