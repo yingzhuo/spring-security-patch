@@ -21,7 +21,7 @@ public class StringToAntPatternRequestMatcher implements Converter<String, AntPa
     @Override
     public AntPathRequestMatcher convert(String value) {
 
-        String[] parts = value.split(",", 2);
+        String[] parts = value.split("[ ,]+", 2);
 
         if (parts.length == 2) {
             String method = parts[0].toUpperCase().trim();

@@ -76,7 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            debugger.debug("[{}][{}] 已经通过认证", path, method);
+            debugger.debug("[{}][{}] 已经通过认证，跳过", path, method);
             filterChain.doFilter(request, response);
             return;
         }
